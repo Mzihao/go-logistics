@@ -27,9 +27,9 @@ type MyClaims struct {
 
 // 定义错误
 var (
-	TokenExpired     error = errors.New("Token已过期,请重新登录")
-	TokenNotValidYet error = errors.New("Token无效,请重新登录")
-	TokenMalformed   error = errors.New("Token不正确,请重新登录")
+	TokenExpired     error = errors.New("token已过期,请重新登录")
+	TokenNotValidYet error = errors.New("token无效,请重新登录")
+	TokenMalformed   error = errors.New("token不正确,请重新登录")
 	TokenInvalid     error = errors.New("这不是一个token,请重新登录")
 )
 
@@ -84,7 +84,6 @@ func JwtToken() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-
 		checkToken := strings.Split(tokenHeader, " ")
 		if len(checkToken) == 0 {
 			c.JSON(http.StatusOK, gin.H{
@@ -94,8 +93,8 @@ func JwtToken() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-
 		if len(checkToken) != 2 || checkToken[0] != "Bearer" {
+			code = 1007
 			c.JSON(http.StatusOK, gin.H{
 				"status":  code,
 				"message": errmsg.GetErrMsg(code),
@@ -126,7 +125,6 @@ func JwtToken() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-
 		c.Set("username", claims)
 		c.Next()
 	}
