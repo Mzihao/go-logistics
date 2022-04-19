@@ -45,27 +45,9 @@ func InitRouter() {
 		auth.DELETE("user/:id", v1.DeleteUser)
 		//修改密码
 		auth.PUT("admin/password/:id", v1.ChangeUserPassword)
-		//// 分类模块的路由接口
-		//auth.GET("admin/category", v1.GetCate)
-		//auth.POST("category/add", v1.AddCategory)
-		//auth.PUT("category/:id", v1.EditCate)
-		//auth.DELETE("category/:id", v1.DeleteCate)
-		//// 文章模块的路由接口
-		//auth.GET("admin/article/info/:id", v1.GetArtInfo)
-		//auth.GET("admin/article", v1.GetArt)
-		//auth.POST("article/add", v1.AddArticle)
-		//auth.PUT("article/:id", v1.EditArt)
-		//auth.DELETE("article/:id", v1.DeleteArt)
-		//// 上传文件
-		//auth.POST("upload", v1.UpLoad)
-		//// 更新个人设置
-		//auth.GET("admin/profile/:id", v1.GetProfile)
-		//auth.PUT("profile/:id", v1.UpdateProfile)
-		//// 评论模块
-		//auth.GET("comment/list", v1.GetCommentList)
-		//auth.DELETE("delcomment/:id", v1.DeleteComment)
-		//auth.PUT("checkcomment/:id", v1.CheckComment)
-		//auth.PUT("uncheckcomment/:id", v1.UncheckComment)
+
+		// 物流查询
+		auth.GET("logistics/:barcode", v1.QueryExpress)
 	}
 
 	router := r.Group("api/v1")
