@@ -22,12 +22,13 @@ func GetMapleLogistics(barcode string) (int, []interface{}) {
 	if len(barcode) != 9 && len(barcode) != 10 && len(barcode) != 12 {
 		return 2001, nil
 	}
+	result := make(map[string]interface{})
 	tik := GetTik()
 	payload := strings.NewReader("tik=" + tik + "&BARCODE1=" + barcode + "&BARCODE2=&BARCODE3=")
 	req, err := http.NewRequest("POST", reqUrl, payload)
 	if err != nil {
 		fmt.Println(err)
-		return 0, nil
+		return 500, nil
 	}
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Add("Origin", "https://www.25431010.tw")
@@ -37,14 +38,14 @@ func GetMapleLogistics(barcode string) (int, []interface{}) {
 	res, err := client.Do(req)
 	if err != nil {
 		fmt.Println(err)
-		return 0, nil
+		return 500, nil
 	}
 	defer res.Body.Close()
 
 	//body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		fmt.Println(err)
-		return 0, nil
+		return 500, nil
 	}
 	doc, err := libxml2.ParseHTMLReader(res.Body)
 	if err != nil {
@@ -69,8 +70,9 @@ func GetMapleLogistics(barcode string) (int, []interface{}) {
 		trackInfo = append(trackInfo, map[string]string{"Date": messageList[3*i+1], "StatusDescription": messageList[3*i+2]})
 	}
 	trackInfo = Rev(trackInfo)
-	fmt.Println(trackInfo)
-	return 200, nil
+	// fmt.Println(trackInfo)
+	result["trackInfo"] = trackInfo
+	return 200, result
 }
 
 func GetTik() string {
@@ -100,7 +102,6 @@ func GetTik() string {
 
 // Rev 切片反转
 func Rev(slice []map[string]string) []map[string]string {
-	fmt.Println(slice)
 	for i, j := 0, len(slice)-1; i < j; i, j = i+1, j-1 {
 		slice[i], slice[j] = slice[j], slice[i]
 	}
