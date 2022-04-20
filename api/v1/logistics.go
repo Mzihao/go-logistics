@@ -1,12 +1,10 @@
 package v1
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"go-logistics/service"
 	"go-logistics/utils/errmsg"
 	"net/http"
-	"strconv"
 )
 
 // QueryExpress 物流查询
@@ -21,9 +19,11 @@ import (
 // @Security ApiKeyAuth
 func QueryExpress(c *gin.Context) {
 	barcode := c.Param("barcode")
-	carrierCode, _ := strconv.Atoi(c.Query("carrierCode"))
-	fmt.Println(barcode, carrierCode)
-	code, data := service.GetMapleLogistics(barcode)
+	carrierCode := c.Query("carrierCode")
+	serviceMap := make(map[string]func(string) (int, map[string]interface{}))
+	serviceMap["bld-express"] = service.GetMapleLogistics
+	server := serviceMap[carrierCode]
+	code, data := server(barcode)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"data":    data,

@@ -18,7 +18,7 @@ var client = &http.Client{Jar: jar}
 
 const reqUrl = "https://www.25431010.tw/Search.php"
 
-func GetMapleLogistics(barcode string) (int, []interface{}) {
+func GetMapleLogistics(barcode string) (int, map[string]interface{}) {
 	if len(barcode) != 9 && len(barcode) != 10 && len(barcode) != 12 {
 		return 2001, nil
 	}
@@ -64,13 +64,15 @@ func GetMapleLogistics(barcode string) (int, []interface{}) {
 			messageList = append(messageList, nodes[i].String())
 		}
 	}
-	messageList = messageList[6:]
+	messageList = messageList[5:]
+	fmt.Println(messageList)
 	var trackInfo []map[string]string
 	for i := 0; i < len(messageList)/3; i++ {
 		trackInfo = append(trackInfo, map[string]string{"Date": messageList[3*i+1], "StatusDescription": messageList[3*i+2]})
 	}
 	trackInfo = Rev(trackInfo)
-	// fmt.Println(trackInfo)
+	result["weblink"] = "https://www.25431010.tw/Search.php"
+	result["carrier_code"] = "bld-express"
 	result["trackInfo"] = trackInfo
 	return 200, result
 }
