@@ -16,6 +16,7 @@ import (
 // @Param   barcode     path    string     true        "物流单号"
 // @Param   carrierCode     query    string     false        "物流公司代码"
 // @Router /api/v1/logistics/{barcode} [get]
+// @Success 200 {object} schemas.LogisticsResponse
 // @Security ApiKeyAuth
 func QueryExpress(c *gin.Context) {
 	barcode := c.Param("barcode")
