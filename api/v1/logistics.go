@@ -21,7 +21,7 @@ func QueryExpress(c *gin.Context) {
 	barcode := c.Param("barcode")
 	carrierCode := c.Query("carrierCode")
 	serviceMap := make(map[string]func(string) (int, map[string]interface{}))
-	serviceMap["bld-express"] = service.GetMapleLogistics
+	serviceMap["bld-express"] = service.MapleLogisticsService
 	server := serviceMap[carrierCode]
 	code, data := server(barcode)
 	c.JSON(http.StatusOK, gin.H{
