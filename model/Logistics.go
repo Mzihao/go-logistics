@@ -7,7 +7,7 @@ import (
 
 type Logistics struct {
 	gorm.Model
-	ID             uint   `gorm:"primary_key;auto_increment" json:"id"`
+	ID             int64  `gorm:"primary_key;auto_increment" json:"id"`
 	TrackingNumber string `gorm:"type:varchar(100)" json:"tracking_number"`
 	CarrierCode    string `gorm:"type:varchar(100)" json:"carrier_code"`
 }
@@ -29,8 +29,11 @@ func GetLogisticsById(id int) (Logistics, int) {
 }
 
 // GetLogisticsByTrackingNumber 查询单个分类信息by id
-func GetLogisticsByTrackingNumber(trackingNumber string) (Logistics, int) {
+func GetLogisticsByTrackingNumber(trackingNumber string, carrierCode string) (int64, Logistics) {
 	var logistics Logistics
-	DB.Where("tracking_number = ?", trackingNumber).First(&logistics)
-	return logistics, errmsg.SUCCESS
+	//DB.Where("tracking_number = ?", trackingNumber).First(&logistics)
+	result := DB.Where(&Logistics{TrackingNumber: trackingNumber, CarrierCode: carrierCode}).First(&logistics)
+	//result.RowsAffected // 返回找到的记录数
+	//result.Error        // returns error or nil
+	return result.RowsAffected, logistics
 }

@@ -48,6 +48,7 @@ func InitRouter() {
 
 		// 物流查询
 		auth.GET("logistics/:barcode", v1.QueryExpress)
+		auth.POST("logistics/:barcode", v1.QueryExpress)
 	}
 
 	router := r.Group("api/v1")

@@ -5,6 +5,8 @@ import (
 	"github.com/lestrrat-go/libxml2"
 	"github.com/lestrrat-go/libxml2/types"
 	"github.com/lestrrat-go/libxml2/xpath"
+	"go-logistics/model"
+	"go-logistics/utils"
 	"io/ioutil"
 	"net/http"
 	"net/http/cookiejar"
@@ -74,6 +76,10 @@ func MapleLogisticsService(barcode string) (int, map[string]interface{}) {
 	result["weblink"] = "https://www.25431010.tw/Search.php"
 	result["carrier_code"] = "bld-express"
 	result["trackInfo"] = trackInfo
+	//if model.GetLogisticsByTrackingNumber(barcode) {
+	//}
+	data := model.Logistics{ID: utils.GetSnowflakeId(), TrackingNumber: barcode, CarrierCode: "bld-express"}
+	model.CreateLogistics(&data)
 	return 200, result
 }
 
@@ -86,9 +92,9 @@ func GetTik() string {
 
 	// 添加请求头
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Add("Origin", "http://www.25431010.tw")
+	req.Header.Add("Origin", "https://www.25431010.tw")
 	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36")
-	req.Header.Add("Referer", "http://www.25431010.tw/Search.php")
+	req.Header.Add("Referer", "https://www.25431010.tw/Search.php")
 
 	resp, _ := client.Do(req)
 	defer resp.Body.Close()

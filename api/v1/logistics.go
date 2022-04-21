@@ -1,7 +1,9 @@
 package v1
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"go-logistics/model"
 	"go-logistics/service"
 	"go-logistics/utils/errmsg"
 	"net/http"
@@ -21,6 +23,12 @@ import (
 func QueryExpress(c *gin.Context) {
 	barcode := c.Param("barcode")
 	carrierCode := c.Query("carrierCode")
+
+	num, logistics := model.GetLogisticsByTrackingNumber(barcode, carrierCode)
+	if num == 0 {
+		fmt.Println("数据库中无数据", logistics)
+		return
+	}
 	serviceMap := make(map[string]func(string) (int, map[string]interface{}))
 	serviceMap["bld-express"] = service.MapleLogisticsService
 	server := serviceMap[carrierCode]
@@ -31,3 +39,13 @@ func QueryExpress(c *gin.Context) {
 		"message": errmsg.GetErrMsg(code),
 	})
 }
+
+//func PlaceOrder(c *gin.Context) {
+//	carrierCode := c.Param("carrierCode")
+//	var data model.User
+//	var msg string
+//	var validCode int
+//	_ = c.ShouldBindJSON(&data)
+//
+//	msg, validCode = validator.Validate(&data)
+//}
