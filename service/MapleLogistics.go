@@ -18,7 +18,7 @@ var client = &http.Client{Jar: jar}
 
 const reqUrl = "https://www.25431010.tw/Search.php"
 
-func GetMapleLogistics(barcode string) (int, map[string]interface{}) {
+func MapleLogisticsService(barcode string) (int, map[string]interface{}) {
 	if len(barcode) != 9 && len(barcode) != 10 && len(barcode) != 12 {
 		return 2001, nil
 	}
