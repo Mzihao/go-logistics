@@ -27,7 +27,7 @@ func Login(c *gin.Context) {
 
 	formData, code = model.CheckLogin(formData.Username, formData.Password)
 
-	if code == errmsg.SUCCESS {
+	if code == errmsg.Success {
 		setToken(c, formData)
 	} else {
 		c.JSON(http.StatusOK, gin.H{
@@ -57,8 +57,8 @@ func setToken(c *gin.Context, user model.User) {
 
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"status":  errmsg.ERROR,
-			"message": errmsg.GetErrMsg(errmsg.ERROR),
+			"status":  errmsg.Error,
+			"message": errmsg.GetErrMsg(errmsg.Error),
 			"token":   token,
 		})
 	}

@@ -19,9 +19,9 @@ func CheckUser(name string) (code int) {
 	var user User
 	DB.Select("id").Where("username = ?", name).First(&user)
 	if user.ID > 0 {
-		return errmsg.ERROR_USERNAME_USED //1001
+		return errmsg.ErrorUsernameUsed //1001
 	}
-	return errmsg.SUCCESS
+	return errmsg.Success
 }
 
 // CheckUpUser 更新查询
@@ -29,12 +29,12 @@ func CheckUpUser(id int, name string) (code int) {
 	var user User
 	DB.Select("id, username").Where("username = ?", name).First(&user)
 	if user.ID == uint(id) {
-		return errmsg.SUCCESS
+		return errmsg.Success
 	}
 	if user.ID > 0 {
-		return errmsg.ERROR_USERNAME_USED //1001
+		return errmsg.ErrorUsernameUsed //1001
 	}
-	return errmsg.SUCCESS
+	return errmsg.Success
 }
 
 // CreateUser 新增用户
@@ -42,9 +42,9 @@ func CreateUser(data *User) int {
 	//data.Password = ScryptPw(data.Password)
 	err := DB.Create(&data).Error
 	if err != nil {
-		return errmsg.ERROR // 500
+		return errmsg.Error // 500
 	}
-	return errmsg.SUCCESS
+	return errmsg.Success
 }
 
 // GetUser 查询用户
@@ -52,9 +52,9 @@ func GetUser(id int) (User, int) {
 	var user User
 	err := DB.Limit(1).Where("ID = ?", id).Find(&user).Error
 	if err != nil {
-		return user, errmsg.ERROR
+		return user, errmsg.Error
 	}
-	return user, errmsg.SUCCESS
+	return user, errmsg.Success
 }
 
 // GetUsers 查询用户列表
@@ -88,9 +88,9 @@ func EditUser(id int, data *User) int {
 	maps["role"] = data.Role
 	err := DB.Model(&user).Where("id = ? ", id).Updates(maps).Error
 	if err != nil {
-		return errmsg.ERROR
+		return errmsg.Error
 	}
-	return errmsg.SUCCESS
+	return errmsg.Success
 }
 
 // ChangePassword 修改密码
@@ -101,9 +101,9 @@ func ChangePassword(id int, data *User) int {
 
 	err := DB.Select("password").Where("id = ?", id).Updates(&data).Error
 	if err != nil {
-		return errmsg.ERROR
+		return errmsg.Error
 	}
-	return errmsg.SUCCESS
+	return errmsg.Success
 }
 
 // DeleteUser 删除用户
@@ -111,9 +111,9 @@ func DeleteUser(id int) int {
 	var user User
 	err := DB.Where("id = ? ", id).Delete(&user).Error
 	if err != nil {
-		return errmsg.ERROR
+		return errmsg.Error
 	}
-	return errmsg.SUCCESS
+	return errmsg.Success
 }
 
 // BeforeCreate 密码加密&权限控制
@@ -150,13 +150,13 @@ func CheckLogin(username string, password string) (User, int) {
 	PasswordErr = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 
 	if user.ID == 0 {
-		return user, errmsg.ERROR_USER_NOT_EXIST
+		return user, errmsg.ErrorUserNotExist
 	}
 	if PasswordErr != nil {
-		return user, errmsg.ERROR_PASSWORD_WRONG
+		return user, errmsg.ErrorPasswordWrong
 	}
 	if user.Role != 1 {
-		return user, errmsg.ERROR_USER_NO_RIGHT
+		return user, errmsg.ErrorUserNoRight
 	}
-	return user, errmsg.SUCCESS
+	return user, errmsg.Success
 }

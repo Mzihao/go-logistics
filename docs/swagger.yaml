@@ -1,0 +1,360 @@
+definitions:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  model.User:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      password:
+        maxLength: 120
+        minLength: 6
+        type: string
+      role:
+        minimum: 2
+        type: integer
+      updatedAt:
+        type: string
+      username:
+        maxLength: 12
+        minLength: 4
+        type: string
+    required:
+    - password
+    - role
+    - username
+    type: object
+  schemas.GetUserInfoResponse:
+    properties:
+      data:
+        description: 用户信息
+        items:
+          $ref: '#/definitions/schemas.UserInfoData'
+        type: array
+      message:
+        description: 响应信息
+        example: 成功
+        type: string
+      status:
+        description: 响应状态
+        example: 200
+        type: integer
+      total:
+        description: 用户数量
+        example: 1
+        type: integer
+    type: object
+  schemas.LoginResponse:
+    properties:
+      id:
+        description: 用户id
+        example: 1
+        type: integer
+      message:
+        description: 响应信息
+        example: 成功
+        type: string
+      name:
+        description: 用户名
+        example: string
+        type: string
+      status:
+        description: 响应状态
+        example: 200
+        type: integer
+      token:
+        description: 令牌
+        example: asdffgh
+        type: string
+    type: object
+  schemas.Logistics:
+    properties:
+      carrier_code:
+        description: 物流公司代码
+        type: string
+      trackInfo:
+        description: 物流时效
+        items:
+          $ref: '#/definitions/schemas.TrackInfo'
+        type: array
+      weblink:
+        description: 物流官网
+        type: string
+    type: object
+  schemas.LogisticsResponse:
+    properties:
+      data:
+        $ref: '#/definitions/schemas.Logistics'
+        description: 物流信息
+      message:
+        description: 响应信息
+        example: success
+        type: string
+      status:
+        description: 响应状态
+        example: 200
+        type: integer
+    type: object
+  schemas.PasswordData:
+    properties:
+      password:
+        description: 密码
+        example: '****'
+        type: string
+    type: object
+  schemas.RegularResponse:
+    properties:
+      message:
+        description: 响应信息
+        example: 成功
+        type: string
+      status:
+        description: 响应状态
+        example: 200
+        type: integer
+    type: object
+  schemas.TrackInfo:
+    properties:
+      date:
+        description: 时间
+        type: string
+      status_description:
+        description: 物流描述
+        type: string
+    type: object
+  schemas.UserInfoData:
+    properties:
+      role:
+        description: 角色码
+        example: 1
+        type: integer
+      username:
+        description: 用户名
+        example: name
+        type: string
+    type: object
+info:
+  contact:
+    name: martin
+  description: 聚合物流服务
+  title: Logistics Query Api
+  version: "1.0"
+paths:
+  /api/v1/admin/changePassword/{id}:
+    put:
+      consumes:
+      - application/json
+      description: 修改密码
+      parameters:
+      - description: 用户id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 请求参数data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.PasswordData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.RegularResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: 修改密码
+      tags:
+      - 用户
+  /api/v1/login:
+    post:
+      consumes:
+      - application/json
+      description: 后台登陆
+      parameters:
+      - description: 请求参数data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.LoginResponse'
+      summary: 后台登陆
+      tags:
+      - 登录控制模块
+  /api/v1/logistics/{barcode}:
+    get:
+      consumes:
+      - application/json
+      description: 物流查询
+      parameters:
+      - description: 物流单号
+        in: path
+        name: barcode
+        required: true
+        type: string
+      - description: 物流公司代码
+        in: query
+        name: carrierCode
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.LogisticsResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: 物流查询
+      tags:
+      - 物流
+  /api/v1/user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 删除用户
+      parameters:
+      - description: 用户id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.RegularResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除用户
+      tags:
+      - 用户
+    get:
+      consumes:
+      - application/json
+      description: 查询单个用户
+      parameters:
+      - description: 用户id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.GetUserInfoResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: 查询单个用户
+      tags:
+      - 用户
+    put:
+      consumes:
+      - application/json
+      description: 编辑用户
+      parameters:
+      - description: 用户id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 请求参数data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.UserInfoData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.RegularResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: 编辑用户
+      tags:
+      - 用户
+  /api/v1/user/add:
+    post:
+      consumes:
+      - application/json
+      description: 添加用户
+      parameters:
+      - description: 请求参数data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.RegularResponse'
+      summary: 添加用户
+      tags:
+      - 用户
+  /api/v1/users:
+    get:
+      consumes:
+      - application/json
+      description: 查询用户列表
+      parameters:
+      - description: 用户名
+        in: query
+        name: username
+        type: string
+      - description: 页面容量
+        in: query
+        name: page_size
+        type: string
+      - description: 页数
+        in: query
+        name: page_num
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.GetUserInfoResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: 查询用户列表
+      tags:
+      - 用户
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

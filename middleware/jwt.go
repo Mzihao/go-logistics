@@ -76,7 +76,7 @@ func JwtToken() gin.HandlerFunc {
 		var code int
 		tokenHeader := c.Request.Header.Get("Authorization")
 		if tokenHeader == "" {
-			code = errmsg.ERROR_TOKEN_EXIST
+			code = errmsg.ErrorTokenExist
 			c.JSON(http.StatusOK, gin.H{
 				"status":  code,
 				"message": errmsg.GetErrMsg(code),
@@ -86,7 +86,7 @@ func JwtToken() gin.HandlerFunc {
 		}
 		checkToken := strings.Split(tokenHeader, " ")
 		if len(checkToken) == 0 {
-			code = errmsg.ERROR_TOKEN_TYPE_WRONG
+			code = errmsg.ErrorTokenTypeWrong
 			c.JSON(http.StatusOK, gin.H{
 				"status":  code,
 				"message": errmsg.GetErrMsg(code),
@@ -95,7 +95,7 @@ func JwtToken() gin.HandlerFunc {
 			return
 		}
 		if len(checkToken) != 2 || checkToken[0] != "Bearer" {
-			code = errmsg.ERROR_TOKEN_TYPE_WRONG
+			code = errmsg.ErrorTokenTypeWrong
 			c.JSON(http.StatusOK, gin.H{
 				"status":  code,
 				"message": errmsg.GetErrMsg(code),
@@ -110,7 +110,7 @@ func JwtToken() gin.HandlerFunc {
 		if err != nil {
 			if err == TokenExpired {
 				c.JSON(http.StatusOK, gin.H{
-					"status":  errmsg.ERROR,
+					"status":  errmsg.Error,
 					"message": "token授权已过期,请重新登录",
 					"data":    nil,
 				})
@@ -119,7 +119,7 @@ func JwtToken() gin.HandlerFunc {
 			}
 			// 其他错误
 			c.JSON(http.StatusOK, gin.H{
-				"status":  errmsg.ERROR,
+				"status":  errmsg.Error,
 				"message": err.Error(),
 				"data":    nil,
 			})

@@ -7,7 +7,7 @@ import (
 
 type Logistics struct {
 	gorm.Model
-	ID             int64  `gorm:"primary_key;auto_increment" json:"id"`
+	ID             string `gorm:"primary_key;auto_increment" json:"id"`
 	TrackingNumber string `gorm:"type:varchar(100)" json:"tracking_number"`
 	CarrierCode    string `gorm:"type:varchar(100)" json:"carrier_code"`
 }
@@ -16,24 +16,27 @@ type Logistics struct {
 func CreateLogistics(data *Logistics) int {
 	err := DB.Create(&data).Error
 	if err != nil {
-		return errmsg.ERROR // 500
+		return errmsg.Error // 500
 	}
-	return errmsg.SUCCESS
+	return errmsg.Success
 }
 
 // GetLogisticsById 查询单个分类信息by id
-func GetLogisticsById(id int) (Logistics, int) {
+func GetLogisticsById(id string) (string, string) {
 	var logistics Logistics
-	DB.Where("id = ?", id).First(&logistics)
-	return logistics, errmsg.SUCCESS
+	result := DB.Where("id = ?", id).First(&logistics)
+	if result.RowsAffected > 0 {
+		return logistics.TrackingNumber, logistics.CarrierCode
+	}
+	return "", ""
 }
 
 // GetLogisticsByTrackingNumber 查询单个分类信息by id
-func GetLogisticsByTrackingNumber(trackingNumber string, carrierCode string) (int64, Logistics) {
+func GetLogisticsByTrackingNumber(trackingNumber string, carrierCode string) int64 {
 	var logistics Logistics
 	//DB.Where("tracking_number = ?", trackingNumber).First(&logistics)
 	result := DB.Where(&Logistics{TrackingNumber: trackingNumber, CarrierCode: carrierCode}).First(&logistics)
 	//result.RowsAffected // 返回找到的记录数
 	//result.Error        // returns error or nil
-	return result.RowsAffected, logistics
+	return result.RowsAffected
 }

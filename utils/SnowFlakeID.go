@@ -1,11 +1,12 @@
 package utils
 
 import (
+	"strconv"
 	"sync"
 	"time"
 )
 
-func GetSnowflakeId() (id int64) {
+func GetSnowflakeId() (id string) {
 	worker := NewWorker()
 	return worker.GetId()
 }
@@ -21,7 +22,7 @@ type Worker struct {
 func NewWorker() *Worker {
 	return &Worker{timestamp: 0, number: 0}
 }
-func (w *Worker) GetId() int64 {
+func (w *Worker) GetId() string {
 	epoch := int64(1613811738) // 设置为去年今天的时间戳...因为位数变了后,几百年都用不完,,实际可以设置上线日期的
 	idlength := uint(9)
 	w.mu.Lock()
@@ -39,5 +40,5 @@ func (w *Worker) GetId() int64 {
 		w.timestamp = now // 将机器上一次生成ID的时间更新为当前时间
 	}
 	ID := (now-epoch)<<idlength | (int64(1) << 1) | (w.number)
-	return ID
+	return strconv.FormatInt(ID, 10)
 }

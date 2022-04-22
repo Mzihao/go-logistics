@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"go-logistics/model"
 	"go-logistics/service"
@@ -24,14 +23,28 @@ func QueryExpress(c *gin.Context) {
 	barcode := c.Param("barcode")
 	carrierCode := c.Query("carrierCode")
 
-	num, logistics := model.GetLogisticsByTrackingNumber(barcode, carrierCode)
-	if num == 0 {
-		fmt.Println("数据库中无数据", logistics)
-		return
+	if carrierCode == "" {
+		barcode, carrierCode = model.GetLogisticsById(barcode)
+		if barcode == "" {
+			c.JSON(http.StatusOK, gin.H{
+				"status":  4002,
+				"data":    nil,
+				"message": errmsg.GetErrMsg(4002),
+			})
+			return
+		}
 	}
 	serviceMap := make(map[string]func(string) (int, map[string]interface{}))
 	serviceMap["bld-express"] = service.MapleLogisticsService
-	server := serviceMap[carrierCode]
+	server, err := serviceMap[carrierCode]
+	if !err {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  4003,
+			"data":    nil,
+			"message": errmsg.GetErrMsg(4003),
+		})
+		return
+	}
 	code, data := server(barcode)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,

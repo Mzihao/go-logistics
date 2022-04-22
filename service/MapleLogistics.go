@@ -22,7 +22,7 @@ const reqUrl = "https://www.25431010.tw/Search.php"
 
 func MapleLogisticsService(barcode string) (int, map[string]interface{}) {
 	if len(barcode) != 9 && len(barcode) != 10 && len(barcode) != 12 {
-		return 2001, nil
+		return 4001, nil
 	}
 	result := make(map[string]interface{})
 	tik := GetTik()
@@ -67,19 +67,19 @@ func MapleLogisticsService(barcode string) (int, map[string]interface{}) {
 		}
 	}
 	messageList = messageList[5:]
-	fmt.Println(messageList)
 	var trackInfo []map[string]string
 	for i := 0; i < len(messageList)/3; i++ {
-		trackInfo = append(trackInfo, map[string]string{"Date": messageList[3*i+1], "StatusDescription": messageList[3*i+2]})
+		trackInfo = append(trackInfo, map[string]string{"Date": strings.Replace(messageList[3*i+1], "/", "-", -1), "StatusDescription": messageList[3*i+2]})
 	}
 	trackInfo = Rev(trackInfo)
 	result["weblink"] = "https://www.25431010.tw/Search.php"
 	result["carrier_code"] = "bld-express"
 	result["trackInfo"] = trackInfo
-	//if model.GetLogisticsByTrackingNumber(barcode) {
-	//}
 	data := model.Logistics{ID: utils.GetSnowflakeId(), TrackingNumber: barcode, CarrierCode: "bld-express"}
-	model.CreateLogistics(&data)
+	num := model.GetLogisticsByTrackingNumber(barcode, "bld-express")
+	if num == 0 {
+		model.CreateLogistics(&data)
+	}
 	return 200, result
 }
 
