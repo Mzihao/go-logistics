@@ -23,8 +23,10 @@ func QueryExpress(c *gin.Context) {
 	barcode := c.Param("barcode")
 	carrierCode := c.Query("carrierCode")
 
+	// carrierCode为空则为自营单号，到数据库查询barcode和carrierCode
 	if carrierCode == "" {
 		barcode, carrierCode = model.GetLogisticsById(barcode)
+		// barcode为空则抛出异常(查无此单号)
 		if barcode == "" {
 			c.JSON(http.StatusOK, gin.H{
 				"status":  4002,
@@ -34,8 +36,13 @@ func QueryExpress(c *gin.Context) {
 			return
 		}
 	}
+
+	// 定义服务转发映射
 	serviceMap := make(map[string]func(string) (int, map[string]interface{}))
 	serviceMap["bld-express"] = service.MapleLogisticsService
+	// ...
+
+	// 获取服务
 	server, err := serviceMap[carrierCode]
 	if !err {
 		c.JSON(http.StatusOK, gin.H{
@@ -45,6 +52,8 @@ func QueryExpress(c *gin.Context) {
 		})
 		return
 	}
+
+	// 查询
 	code, data := server(barcode)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,

@@ -46,9 +46,10 @@ func InitRouter() {
 		//修改密码
 		auth.PUT("admin/password/:id", v1.ChangeUserPassword)
 
-		// 物流查询
+		// 物流服务
 		auth.GET("logistics/:barcode", v1.QueryExpress)
 		auth.POST("logistics/:barcode", v1.QueryExpress)
+		auth.DELETE("logistics/:barcode", v1.QueryExpress)
 	}
 
 	router := r.Group("api/v1")
