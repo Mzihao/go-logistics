@@ -3,6 +3,9 @@
 ## 描述
 一个聚合多个物流公司的，集成物流下单，查询的服务。
 
+## Version
+go 1.17
+
 ## 组件
 1. [Gin](https://github.com/gin-gonic/gin): 轻量级Web框架，自称路由速度是golang最快的 
 2. [GORM](https://gorm.io/index.html): ORM工具。本项目需要配合Mysql使用 
@@ -16,10 +19,12 @@
 #### 下载Swag for Go
 go get -u github.com/swaggo/swag/cmd/swag
 #### 生成所需的文件和文件夹
-```shell
+
+```go
 swag init
 swag init --parseDependency -- // 可加载外部包
 ```
+
 ## 运行
 ```shell
 go run main.go
