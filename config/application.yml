@@ -11,3 +11,6 @@ datasource:
   password: wangt777
   charset: utf8
   loc: Asia/Shanghai
+logistics:
+  SFKey: XXXX
+  SFPartnerID: XXXX

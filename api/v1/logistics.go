@@ -8,6 +8,10 @@ import (
 	"net/http"
 )
 
+type Logistics interface {
+	SearchRouter(barcode string) (int, map[string]interface{})
+}
+
 // QueryExpress 物流查询
 // @Tags 物流
 // @Summary 物流查询
@@ -37,13 +41,14 @@ func QueryExpress(c *gin.Context) {
 		}
 	}
 
-	// 定义服务转发映射
-	serviceMap := make(map[string]func(string) (int, map[string]interface{}))
-	serviceMap["bld-express"] = service.MapleLogisticsService
+	//定义服务转发映射
+	serviceMap := make(map[string]Logistics)
+	serviceMap["bld-express"] = service.MapleLogistics{}
 	// ...
 
 	// 获取服务
 	server, err := serviceMap[carrierCode]
+	//server := service.MapleLogistics{}
 	if !err {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  4003,
@@ -52,9 +57,10 @@ func QueryExpress(c *gin.Context) {
 		})
 		return
 	}
+	logistics := server
 
 	// 查询
-	code, data := server(barcode)
+	code, data := logistics.SearchRouter(barcode)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"data":    data,

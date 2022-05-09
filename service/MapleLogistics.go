@@ -14,13 +14,15 @@ import (
 	"strings"
 )
 
+type MapleLogistics struct{}
+
 // 自动更新cookie
 var jar, _ = cookiejar.New(nil)
 var client = &http.Client{Jar: jar}
 
 const reqUrl = "https://www.25431010.tw/Search.php"
 
-func MapleLogisticsService(barcode string) (int, map[string]interface{}) {
+func (m MapleLogistics) SearchRouter(barcode string) (int, map[string]interface{}) {
 	if len(barcode) != 9 && len(barcode) != 10 && len(barcode) != 12 {
 		return 4001, nil
 	}
