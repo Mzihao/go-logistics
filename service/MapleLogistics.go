@@ -27,7 +27,7 @@ func (m MapleLogistics) SearchRouter(barcode string) (int, map[string]interface{
 		return 4001, nil
 	}
 	result := make(map[string]interface{})
-	tik := GetTik()
+	tik := getTik()
 	payload := strings.NewReader("tik=" + tik + "&BARCODE1=" + barcode + "&BARCODE2=&BARCODE3=")
 	req, err := http.NewRequest("POST", reqUrl, payload)
 	if err != nil {
@@ -85,7 +85,7 @@ func (m MapleLogistics) SearchRouter(barcode string) (int, map[string]interface{
 	return 200, result
 }
 
-func GetTik() string {
+func getTik() string {
 	req, err := http.NewRequest("GET", reqUrl, nil)
 	if err != nil {
 		fmt.Printf("get failed, err:%v\n\n", err)
@@ -110,8 +110,8 @@ func GetTik() string {
 	return found[0][1]
 }
 
-// Rev 切片反转
-func Rev(slice []map[string]string) []map[string]string {
+// rev 切片反转
+func rev(slice []map[string]string) []map[string]string {
 	for i, j := 0, len(slice)-1; i < j; i, j = i+1, j-1 {
 		slice[i], slice[j] = slice[j], slice[i]
 	}
