@@ -50,6 +50,9 @@ func InitRouter() {
 		auth.GET("logistics/:barcode", v1.QueryExpress)
 		auth.POST("logistics/:barcode", v1.QueryExpress)
 		auth.DELETE("logistics/:barcode", v1.QueryExpress)
+
+		// 自提物流
+		auth.POST("pickUp", v1.CreateOrder)
 	}
 
 	router := r.Group("api/v1")

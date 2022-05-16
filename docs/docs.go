@@ -141,6 +141,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/pickUp": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "自提物流下单",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "自提物流"
+                ],
+                "summary": "自提物流下单",
+                "parameters": [
+                    {
+                        "description": "请求参数data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.PickUp"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.PickUpResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/user/add": {
             "post": {
                 "description": "添加用户",
@@ -353,6 +392,29 @@ const docTemplate = `{
                 }
             }
         },
+        "model.PickUp": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
         "model.User": {
             "type": "object",
             "required": [
@@ -492,6 +554,42 @@ const docTemplate = `{
                     "description": "密码",
                     "type": "string",
                     "example": "****"
+                }
+            }
+        },
+        "schemas.PickUp": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "example": "广东省深圳市福田区沙尾街道金地三路"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "12345678"
+                },
+                "status": {
+                    "type": "integer",
+                    "example": 0
+                }
+            }
+        },
+        "schemas.PickUpResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "物流信息",
+                    "$ref": "#/definitions/schemas.PickUp"
+                },
+                "message": {
+                    "description": "响应信息",
+                    "type": "string",
+                    "example": "success"
+                },
+                "status": {
+                    "description": "响应状态",
+                    "type": "integer",
+                    "example": 200
                 }
             }
         },

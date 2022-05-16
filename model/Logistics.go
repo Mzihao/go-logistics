@@ -21,7 +21,7 @@ func CreateLogistics(data *Logistics) int {
 	return errmsg.Success
 }
 
-// GetLogisticsById 查询单个分类信息by id
+// GetLogisticsById 查询单个物流信息by id
 func GetLogisticsById(id string) (string, string) {
 	var logistics Logistics
 	result := DB.Where("id = ?", id).First(&logistics)
@@ -31,7 +31,7 @@ func GetLogisticsById(id string) (string, string) {
 	return "", ""
 }
 
-// GetLogisticsByTrackingNumber 查询单个分类信息by id
+// GetLogisticsByTrackingNumber 查询单个物流信息by TrackingNumber
 func GetLogisticsByTrackingNumber(trackingNumber string, carrierCode string) int64 {
 	var logistics Logistics
 	//DB.Where("tracking_number = ?", trackingNumber).First(&logistics)

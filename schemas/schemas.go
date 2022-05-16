@@ -54,3 +54,15 @@ type LoginResponse struct {
 	Message string `json:"message" form:"message" example:"成功"`  //响应信息
 	Token   string `json:"token" form:"token" example:"asdffgh"` //令牌
 }
+
+type PickUp struct {
+	ID      string `json:"id" form:"id" example:"12345678"`
+	Status  uint   `json:"status" form:"status" example:"0"`
+	Address string `json:"address" form:"address" example:"广东省深圳市福田区沙尾街道金地三路"`
+}
+
+type PickUpResponse struct {
+	Status  int    `json:"status" form:"status" example:"200"`       //响应状态
+	Message string `json:"message" form:"message" example:"success"` //响应信息
+	Data    PickUp // 物流信息
+}

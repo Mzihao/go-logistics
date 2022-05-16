@@ -57,10 +57,9 @@ func QueryExpress(c *gin.Context) {
 		})
 		return
 	}
-	logistics := server
 
 	// 查询
-	code, data := logistics.SearchRouter(barcode)
+	code, data := server.SearchRouter(barcode)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"data":    data,
@@ -70,10 +69,36 @@ func QueryExpress(c *gin.Context) {
 
 //func PlaceOrder(c *gin.Context) {
 //	carrierCode := c.Param("carrierCode")
-//	var data model.User
+//	var data model.Logistics
 //	var msg string
 //	var validCode int
 //	_ = c.ShouldBindJSON(&data)
 //
 //	msg, validCode = validator.Validate(&data)
+//	if validCode != errmsg.Success {
+//		c.JSON(
+//			http.StatusOK, gin.H{
+//				"status":  validCode,
+//				"message": msg,
+//			},
+//		)
+//		c.Abort()
+//		return
+//	}
+//
+//	//定义服务转发映射
+//	serviceMap := make(map[string]Logistics)
+//	serviceMap["bld-express"] = service.MapleLogistics{}
+//	// ...
+//
+//	// 获取服务
+//	server, err := serviceMap[carrierCode]
+//	if !err {
+//		c.JSON(http.StatusOK, gin.H{
+//			"status":  4003,
+//			"data":    nil,
+//			"message": errmsg.GetErrMsg(4003),
+//		})
+//		return
+//	}
 //}

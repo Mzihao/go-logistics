@@ -7,6 +7,21 @@ definitions:
         description: Valid is true if Time is not NULL
         type: boolean
     type: object
+  model.PickUp:
+    properties:
+      address:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: string
+      status:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
   model.User:
     properties:
       createdAt:
@@ -110,6 +125,32 @@ definitions:
         description: 密码
         example: '****'
         type: string
+    type: object
+  schemas.PickUp:
+    properties:
+      address:
+        example: 广东省深圳市福田区沙尾街道金地三路
+        type: string
+      id:
+        example: "12345678"
+        type: string
+      status:
+        example: 0
+        type: integer
+    type: object
+  schemas.PickUpResponse:
+    properties:
+      data:
+        $ref: '#/definitions/schemas.PickUp'
+        description: 物流信息
+      message:
+        description: 响应信息
+        example: success
+        type: string
+      status:
+        description: 响应状态
+        example: 200
+        type: integer
     type: object
   schemas.RegularResponse:
     properties:
@@ -227,6 +268,30 @@ paths:
       summary: 物流查询
       tags:
       - 物流
+  /api/v1/pickUp:
+    post:
+      consumes:
+      - application/json
+      description: 自提物流下单
+      parameters:
+      - description: 请求参数data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.PickUp'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.PickUpResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: 自提物流下单
+      tags:
+      - 自提物流
   /api/v1/user/{id}:
     delete:
       consumes:

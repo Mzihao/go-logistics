@@ -12,5 +12,7 @@ datasource:
   charset: utf8
   loc: Asia/Shanghai
 logistics:
-  SFKey: XXXX
-  SFPartnerID: XXXX
+  SF:
+    url: https://fapi.sf-express.com/fopApiServices/access/sandbox/enter
+    key: XXXX
+    partnerID: XXXX
