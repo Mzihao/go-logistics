@@ -17,10 +17,13 @@ go 1.17
 
 ## Swagger
 #### 下载Swag for Go
+```shell
 go get -u github.com/swaggo/swag/cmd/swag
+```
+
 #### 生成所需的文件和文件夹
 
-```go
+```shell
 swag init
 swag init --parseDependency -- // 可加载外部包
 ```
