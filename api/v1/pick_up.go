@@ -53,3 +53,25 @@ func CreateOrder(c *gin.Context) {
 		},
 	)
 }
+
+// CreateOrder 自提物流查询
+// @Tags 自提物流
+// @Summary 自提物流查询
+// @Description 自提物流查询
+// @Accept  json
+// @Produce json
+// @Router /api/v1/pickUp/{id} [get]
+// @Success 200 {object} schemas.PickUpResponse
+// @Security ApiKeyAuth
+func SearchRouter(c *gin.Context) {
+	id := c.Param("id")
+	pickUp := service.PickUp{ID: id}
+	code, result := pickUp.SearchRouter()
+	c.JSON(
+		http.StatusOK, gin.H{
+			"status":  code,
+			"message": errmsg.GetErrMsg(code),
+			"data":    result,
+		},
+	)
+}

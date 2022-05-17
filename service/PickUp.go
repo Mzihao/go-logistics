@@ -23,3 +23,15 @@ func (p PickUp) CreateOrder() (int, map[string]interface{}) {
 	result["status"] = 1
 	return 200, result
 }
+
+func (p PickUp) SearchRouter() (int, map[string]interface{}) {
+	result := make(map[string]interface{})
+	id, status, address := model.GetPickUp(p.id)
+	if id == "" {
+		return 4002, result
+	}
+	result["id"] = id
+	result["address"] = address
+	result["status"] = status
+	return 200, result
+}

@@ -53,6 +53,7 @@ func InitRouter() {
 
 		// 自提物流
 		auth.POST("pickUp", v1.CreateOrder)
+		auth.GET("pickUp/:id", v1.SearchRouter)
 	}
 
 	router := r.Group("api/v1")
