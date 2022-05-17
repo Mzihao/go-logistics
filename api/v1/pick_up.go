@@ -54,12 +54,13 @@ func CreateOrder(c *gin.Context) {
 	)
 }
 
-// CreateOrder 自提物流查询
+// SearchRouter 自提物流查询
 // @Tags 自提物流
 // @Summary 自提物流查询
 // @Description 自提物流查询
 // @Accept  json
 // @Produce json
+// @Param   id     path    string     true        "物流单号"
 // @Router /api/v1/pickUp/{id} [get]
 // @Success 200 {object} schemas.PickUpResponse
 // @Security ApiKeyAuth
