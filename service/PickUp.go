@@ -5,7 +5,7 @@ import (
 	"go-logistics/utils"
 )
 
-type PickUp struct {
+type PickUpServer struct {
 	ID      string
 	Address string
 	status  uint
@@ -13,7 +13,7 @@ type PickUp struct {
 
 var statusMap = map[uint]string{0: "未知", 1: "备货中", 2: "待取货", 3: "已取货", 4: "取消订单"}
 
-func (p PickUp) CreateOrder() (int, map[string]interface{}) {
+func (p PickUpServer) CreateOrder() (int, map[string]interface{}) {
 	id := utils.GetSnowflakeId()
 	data := model.PickUp{ID: id, Address: p.Address, Status: 1}
 	model.CreatePickUp(&data)
@@ -24,7 +24,7 @@ func (p PickUp) CreateOrder() (int, map[string]interface{}) {
 	return 200, result
 }
 
-func (p PickUp) SearchRouter() (int, map[string]interface{}) {
+func (p PickUpServer) SearchRouter() (int, map[string]interface{}) {
 	result := make(map[string]interface{})
 	id, status, address := model.GetPickUp(p.ID)
 	if id == "" {
@@ -36,8 +36,17 @@ func (p PickUp) SearchRouter() (int, map[string]interface{}) {
 	return 200, result
 }
 
-//func (p PickUp) UpdateOrder() (int, map[string]interface{}) {
-//	result := make(map[string]interface{})
-//	data := model.PickUp{ID: p.ID, Status: p.status, Address: p.Address}
-//	model.EditPickUp(p.ID, &data)
-//}
+func (p PickUpServer) UpdateOrder() (int, map[string]interface{}) {
+	result := make(map[string]interface{})
+	// 判断单号是否存在
+	if model.HasOrder(p.ID) == 4002 {
+		return 4002, result
+	}
+	data := model.PickUp{Status: p.status, Address: p.Address}
+	model.EditPickUp(p.ID, &data)
+	id, status, address := model.GetPickUp(p.ID)
+	result["id"] = id
+	result["address"] = address
+	result["status"] = statusMap[status]
+	return 200, result
+}

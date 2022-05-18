@@ -21,7 +21,7 @@ func CreatePickUp(data *PickUp) int {
 	return errmsg.Success
 }
 
-// GetPickUp 查询单个物流信息by id
+// GetPickUp 查询单个物流信息
 func GetPickUp(id string) (string, uint, string) {
 	var pickUp PickUp
 	result := DB.Where("id = ?", id).First(&pickUp)
@@ -31,6 +31,7 @@ func GetPickUp(id string) (string, uint, string) {
 	return "", 0, ""
 }
 
+// EditPickUp 编辑订单信息
 func EditPickUp(id string, data *PickUp) int {
 	var pick PickUp
 	var maps = make(map[string]interface{})
@@ -43,6 +44,16 @@ func EditPickUp(id string, data *PickUp) int {
 	err := DB.Model(&pick).Where("id = ?", id).Updates(maps).Error
 	if err != nil {
 		return errmsg.Error
+	}
+	return errmsg.Success
+}
+
+// 查询订单号是否存在
+func HasOrder(id string) int {
+	var pickUp PickUp
+	DB.Select("id").Where("id = ?", id).First(&pickUp)
+	if pickUp.ID > 0 {
+		return errmsg.NotFound //4002
 	}
 	return errmsg.Success
 }
