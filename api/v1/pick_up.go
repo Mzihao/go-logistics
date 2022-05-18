@@ -43,7 +43,7 @@ func CreateOrder(c *gin.Context) {
 		return
 	}
 
-	pickUp := service.PickUp{Address: data.Address}
+	pickUp := service.PickUpServer{Address: data.Address}
 	code, result := pickUp.CreateOrder()
 	c.JSON(
 		http.StatusOK, gin.H{
@@ -66,7 +66,7 @@ func CreateOrder(c *gin.Context) {
 // @Security ApiKeyAuth
 func SearchRouter(c *gin.Context) {
 	id := c.Param("id")
-	pickUp := service.PickUp{ID: id}
+	pickUp := service.PickUpServer{ID: id}
 	code, result := pickUp.SearchRouter()
 	c.JSON(
 		http.StatusOK, gin.H{
@@ -77,6 +77,17 @@ func SearchRouter(c *gin.Context) {
 	)
 }
 
+// UpdateOrder 自提物流信息修改
+// @Tags 自提物流
+// @Summary 自提物流信息修改
+// @Description 自提物流信息修改
+// @Accept  json
+// @Produce json
+// @Param   id     path    string     true        "物流单号"
+// @Param data body model.PickUp true "请求参数data"
+// @Router /api/v1/pickUp/{id} [put]
+// @Success 200 {object} schemas.PickUpResponse
+// @Security ApiKeyAuth
 func UpdateOrder(c *gin.Context) {
 	id := c.Param("id")
 	var data model.PickUp
@@ -95,4 +106,37 @@ func UpdateOrder(c *gin.Context) {
 		c.Abort()
 		return
 	}
+
+	pickUp := service.PickUpServer{ID: id, Address: data.Address, Status: data.Status}
+	code, result := pickUp.UpdateOrder()
+	c.JSON(
+		http.StatusOK, gin.H{
+			"status":  code,
+			"message": errmsg.GetErrMsg(code),
+			"data":    result,
+		},
+	)
+}
+
+// CancelOrder 自提物流取消订单
+// @Tags 自提物流
+// @Summary 自提物流取消订单
+// @Description 自提物流取消订单
+// @Accept  json
+// @Produce json
+// @Param   id     path    string     true        "物流单号"
+// @Router /api/v1/pickUp/{id} [delete]
+// @Success 200 {object} schemas.PickUpResponse
+// @Security ApiKeyAuth
+func CancelOrder(c *gin.Context) {
+	id := c.Param("id")
+	pickUp := service.PickUpServer{ID: id}
+	code, result := pickUp.CancelOrder()
+	c.JSON(
+		http.StatusOK, gin.H{
+			"status":  code,
+			"message": errmsg.GetErrMsg(code),
+			"data":    result,
+		},
+	)
 }

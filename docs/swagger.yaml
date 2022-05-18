@@ -292,6 +292,79 @@ paths:
       summary: 自提物流下单
       tags:
       - 自提物流
+  /api/v1/pickUp/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 自提物流取消订单
+      parameters:
+      - description: 物流单号
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.PickUpResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: 自提物流取消订单
+      tags:
+      - 自提物流
+    get:
+      consumes:
+      - application/json
+      description: 自提物流查询
+      parameters:
+      - description: 物流单号
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.PickUpResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: 自提物流查询
+      tags:
+      - 自提物流
+    put:
+      consumes:
+      - application/json
+      description: 自提物流信息修改
+      parameters:
+      - description: 物流单号
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 请求参数data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.PickUp'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.PickUpResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: 自提物流信息修改
+      tags:
+      - 自提物流
   /api/v1/user/{id}:
     delete:
       consumes:

@@ -1,23 +1,24 @@
 FROM golang:1.17-alpine
 MAINTAINER pumpkin_mak
 
-RUN adduser -u 10001 -D app-runner
+## 在docker的根目录下创建相应的使用目录
+RUN mkdir -p /www/go-logistics
+## 设置工作目录
+WORKDIR /www/go-logistics
+## 把当前（宿主机上）目录下的文件都复制到docker上刚创建的目录下
+COPY . /www/go-logistics
 
-ADD go.mod .
-ADD go.sum .
-RUN go mod download
-WORKDIR /go/src/go-logistics
 ENV GO111MODULE=on \
-    GOPROXY=https://goproxy.cn,direct \
-    GIN_MODE=release
+    CGO_ENABLED=0 \
+    GOOS=linux \
+    GOARCH=amd64 \
+	GOPROXY="https://goproxy.cn,direct"
 
-COPY . .
-RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -a -o go-logistics .
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
 
-COPY . .
-COPY --from=build /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-RUN go build .
+#暴露端口
 EXPOSE 9090
 
-USER app-runner
-CMD ["./go-logistics"]
+CMD ["go","run","main.go"]

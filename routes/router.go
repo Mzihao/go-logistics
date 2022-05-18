@@ -54,6 +54,8 @@ func InitRouter() {
 		// 自提物流
 		auth.POST("pickUp", v1.CreateOrder)
 		auth.GET("pickUp/:id", v1.SearchRouter)
+		auth.PUT("pickUp/:id", v1.UpdateOrder)
+		auth.DELETE("pickUp/:id", v1.CancelOrder)
 	}
 
 	router := r.Group("api/v1")

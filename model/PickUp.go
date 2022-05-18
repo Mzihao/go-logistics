@@ -48,11 +48,11 @@ func EditPickUp(id string, data *PickUp) int {
 	return errmsg.Success
 }
 
-// 查询订单号是否存在
+// HasOrder 查询订单号是否存在
 func HasOrder(id string) int {
 	var pickUp PickUp
 	DB.Select("id").Where("id = ?", id).First(&pickUp)
-	if pickUp.ID > 0 {
+	if pickUp.ID == "" {
 		return errmsg.NotFound //4002
 	}
 	return errmsg.Success
