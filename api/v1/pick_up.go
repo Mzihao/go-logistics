@@ -76,3 +76,23 @@ func SearchRouter(c *gin.Context) {
 		},
 	)
 }
+
+func UpdateOrder(c *gin.Context) {
+	id := c.Param("id")
+	var data model.PickUp
+	var msg string
+	var validCode int
+	_ = c.ShouldBindJSON(&data)
+
+	msg, validCode = validator.Validate(&data)
+	if validCode != errmsg.Success {
+		c.JSON(
+			http.StatusOK, gin.H{
+				"status":  validCode,
+				"message": msg,
+			},
+		)
+		c.Abort()
+		return
+	}
+}
