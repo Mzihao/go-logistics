@@ -43,7 +43,8 @@ func QueryExpress(c *gin.Context) {
 
 	//定义服务转发映射
 	serviceMap := make(map[string]Logistics)
-	serviceMap["bld-express"] = service.MapleLogistics{}
+	serviceMap["bld-express"] = service.MapleLogisticsServer{}
+	serviceMap["zeek"] = service.ZeekServer{}
 	// ...
 
 	// 获取服务

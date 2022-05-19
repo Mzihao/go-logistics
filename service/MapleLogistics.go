@@ -14,21 +14,22 @@ import (
 	"strings"
 )
 
-type MapleLogistics struct{}
+type MapleLogisticsServer struct{}
 
-// 自动更新cookie
-var jar, _ = cookiejar.New(nil)
-var client = &http.Client{Jar: jar}
-
-const reqUrl = "https://www.25431010.tw/Search.php"
-
-func (m MapleLogistics) SearchRouter(barcode string) (int, map[string]interface{}) {
+func (m MapleLogisticsServer) SearchRouter(barcode string) (int, map[string]interface{}) {
+	reqUrl := "https://www.25431010.tw/Search.php"
 	if len(barcode) != 9 && len(barcode) != 10 && len(barcode) != 12 {
 		return 4001, nil
 	}
 	result := make(map[string]interface{})
-	tik := getTik()
+
+	// 自动更新cookie
+	var jar, _ = cookiejar.New(nil)
+	client := &http.Client{Jar: jar}
+
+	tik := getTik(reqUrl, client)
 	payload := strings.NewReader("tik=" + tik + "&BARCODE1=" + barcode + "&BARCODE2=&BARCODE3=")
+
 	req, err := http.NewRequest("POST", reqUrl, payload)
 	if err != nil {
 		fmt.Println(err)
@@ -85,7 +86,7 @@ func (m MapleLogistics) SearchRouter(barcode string) (int, map[string]interface{
 	return 200, result
 }
 
-func getTik() string {
+func getTik(reqUrl string, client *http.Client) string {
 	req, err := http.NewRequest("GET", reqUrl, nil)
 	if err != nil {
 		fmt.Printf("get failed, err:%v\n\n", err)
