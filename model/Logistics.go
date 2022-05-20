@@ -32,11 +32,11 @@ func GetLogisticsById(id string) (string, string) {
 }
 
 // GetLogisticsByTrackingNumber 查询单个物流信息by TrackingNumber
-func GetLogisticsByTrackingNumber(trackingNumber string, carrierCode string) int64 {
+func GetLogisticsByTrackingNumber(trackingNumber string, carrierCode string) (int64, Logistics) {
 	var logistics Logistics
 	//DB.Where("tracking_number = ?", trackingNumber).First(&logistics)
 	result := DB.Where(&Logistics{TrackingNumber: trackingNumber, CarrierCode: carrierCode}).First(&logistics)
 	//result.RowsAffected // 返回找到的记录数
 	//result.Error        // returns error or nil
-	return result.RowsAffected
+	return result.RowsAffected, logistics
 }

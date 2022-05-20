@@ -78,10 +78,13 @@ func (m MapleLogisticsServer) SearchRouter(barcode string) (int, map[string]inte
 	result["weblink"] = "https://www.25431010.tw/Search.php"
 	result["carrier_code"] = "bld-express"
 	result["trackInfo"] = trackInfo
-	data := model.Logistics{ID: utils.GetSnowflakeId(), TrackingNumber: barcode, CarrierCode: "bld-express"}
-	num := model.GetLogisticsByTrackingNumber(barcode, "bld-express")
+	num, logistics := model.GetLogisticsByTrackingNumber(barcode, "bld-express")
 	if num == 0 {
+		id := utils.GetSnowflakeId()
+		data := model.Logistics{ID: id, TrackingNumber: barcode, CarrierCode: "bld-express"}
 		model.CreateLogistics(&data)
+	} else {
+		result["id"] = logistics.ID
 	}
 	return 200, result
 }

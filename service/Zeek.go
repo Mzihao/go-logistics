@@ -4,9 +4,12 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/tidwall/gjson"
+	"go-logistics/model"
+	"go-logistics/utils"
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -57,16 +60,29 @@ func (z ZeekServer) SearchRouter(barcode string) (int, map[string]interface{}) {
 		return 500, result
 	}
 	dataStr := string(body)
-	fmt.Println(dataStr)
+	//fmt.Println(dataStr)
 	isError := gjson.Get(dataStr, "error")
-	//messageList := make([]string, 5)
 	var trackInfo []map[string]string
 	result["trackInfo"] = trackInfo
 	if isError.Num != 0 {
 		trackInfo = append(
 			trackInfo, map[string]string{"Date": time.Now().Format("2006-01-02 15:04:05"), "StatusDescription": "訂單正在創建"})
-		result["trackInfo"] = trackInfo
-		return 200, result
+	} else {
+		data := gjson.Get(dataStr, "data.#")
+		for i := 0; i < int(data.Num); i++ {
+			if gjson.Get(dataStr, "data."+strconv.Itoa(i)+".detail").Str != "" {
+				trackInfo = append(trackInfo, map[string]string{"Date": gjson.Get(dataStr, "data."+strconv.Itoa(i)+".addtime").Str, "StatusDescription": gjson.Get(dataStr, "data."+strconv.Itoa(i)+".detail").Str})
+			}
+		}
 	}
+	num, logistics := model.GetLogisticsByTrackingNumber(barcode, "zeek")
+	if num == 0 {
+		id := utils.GetSnowflakeId()
+		data := model.Logistics{ID: id, TrackingNumber: barcode, CarrierCode: "zeek"}
+		model.CreateLogistics(&data)
+	} else {
+		result["id"] = logistics.ID
+	}
+	result["trackInfo"] = trackInfo
 	return 200, result
 }
