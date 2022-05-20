@@ -31,7 +31,7 @@ func (z ZeekServer) SearchRouter(barcode string) (int, map[string]interface{}) {
 	}
 
 	client := &http.Client{}
-	req, err := http.NewRequest("GET", reqUrl, payload)
+	req, err := http.NewRequest("POST", reqUrl, payload)
 
 	if err != nil {
 		fmt.Println(err)
@@ -43,7 +43,6 @@ func (z ZeekServer) SearchRouter(barcode string) (int, map[string]interface{}) {
 	req.Header.Add("Origin", "https://www.zeek.one")
 	req.Header.Add("Referer", "https://www.zeek.one/")
 	req.Header.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36")
-
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 	res, err := client.Do(req)
 	if err != nil {
