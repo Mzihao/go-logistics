@@ -7,21 +7,6 @@ definitions:
         description: Valid is true if Time is not NULL
         type: boolean
     type: object
-  model.PickUp:
-    properties:
-      address:
-        type: string
-      createdAt:
-        type: string
-      deletedAt:
-        $ref: '#/definitions/gorm.DeletedAt'
-      id:
-        type: string
-      status:
-        type: integer
-      updatedAt:
-        type: string
-    type: object
   model.User:
     properties:
       createdAt:
@@ -48,6 +33,55 @@ definitions:
     - role
     - username
     type: object
+  schemas.AddLogisticsResponse:
+    properties:
+      data:
+        $ref: '#/definitions/schemas.Order'
+        description: 物流信息
+      message:
+        description: 响应信息
+        example: success
+        type: string
+      status:
+        description: 响应状态
+        example: 200
+        type: integer
+    type: object
+  schemas.CargoList:
+    properties:
+      count:
+        description: 数量
+        example: 5
+        type: integer
+      height:
+        description: 高(单位默认为厘米)
+        example: 80
+        type: number
+      length:
+        description: 长(单位默认为厘米)
+        example: 100
+        type: number
+      name:
+        description: 货物名称
+        example: 货物名称
+        type: string
+      uint:
+        description: 单位， 如个、台、件
+        example: 件
+        type: string
+      volume:
+        description: 宽(单位默认为厘米)
+        example: 480000
+        type: number
+      weight:
+        description: 重量(单位:kg)
+        example: 60
+        type: number
+      width:
+        description: 宽(单位默认为厘米)
+        example: 60
+        type: number
+    type: object
   schemas.GetUserInfoResponse:
     properties:
       data:
@@ -67,6 +101,17 @@ definitions:
         description: 用户数量
         example: 1
         type: integer
+    type: object
+  schemas.LoginRequest:
+    properties:
+      password:
+        description: 密码
+        example: '****'
+        type: string
+      username:
+        description: 用户名
+        example: name
+        type: string
     type: object
   schemas.LoginResponse:
     properties:
@@ -93,8 +138,14 @@ definitions:
     type: object
   schemas.Logistics:
     properties:
+      barcode:
+        description: 运单号
+        type: string
       carrier_code:
         description: 物流公司代码
+        type: string
+      id:
+        description: 订单号
         type: string
       trackInfo:
         description: 物流时效
@@ -105,19 +156,86 @@ definitions:
         description: 物流官网
         type: string
     type: object
-  schemas.LogisticsResponse:
+  schemas.LogisticsRequest:
     properties:
-      data:
-        $ref: '#/definitions/schemas.Logistics'
-        description: 物流信息
-      message:
-        description: 响应信息
-        example: success
+      cargoList:
+        $ref: '#/definitions/schemas.CargoList'
+        description: 货物明细
+      delivery_address:
+        description: 到件方详细地址
+        example: 沙头街道皇庭广场
         type: string
-      status:
-        description: 响应状态
-        example: 200
+      delivery_city:
+        description: 到件方所在地级行政区名称
+        example: 深圳市
+        type: string
+      delivery_contact:
+        description: 到件方联系人
+        example: 李华
+        type: string
+      delivery_county:
+        description: 到件方所在县/区级行政区名称
+        example: 福田区
+        type: string
+      delivery_province:
+        description: 到件方所在省级行政区名称
+        example: 广东省
+        type: string
+      delivery_tel:
+        description: 到件方联系电话
+        example: "18452154695"
+        type: string
+      expected_pick_up_time:
+        description: 希望上门取件时间。格式：yyyy-MM-dd HH:mm:ss。isDocall=1时有效，其中，预约时间超过晚8点，会自动约成第二天。
+        example: "2022-05-21 00:00:00"
+        type: string
+      is_do_call:
+        description: 是否需要上门,0-不下call，不会通知小哥上门；1-下call，默认2小时内上门
+        example: 1
         type: integer
+      pay_method:
+        description: 付款方式(邮费)：1.寄方付2.收方付3.第三方付
+        example: 1
+        type: integer
+      remark:
+        example: 备注
+        type: string
+      send_address:
+        description: 寄件方详细地址
+        example: 粤海街道科兴科学园
+        type: string
+      send_city:
+        description: 寄件方所在地级行政区名称
+        example: 深圳市
+        type: string
+      send_contact:
+        description: 寄件方联系人
+        example: 张湘
+        type: string
+      send_county:
+        description: 寄件人所在县/区级行政区名称
+        example: 南山区
+        type: string
+      send_province:
+        description: 寄件方所在省级行政区名称
+        example: 广东省
+        type: string
+      send_tel:
+        description: 寄件方联系电话
+        example: "18452154695"
+        type: string
+    type: object
+  schemas.Order:
+    properties:
+      barcode:
+        description: 运单号
+        type: string
+      carrier_code:
+        description: 物流公司代码
+        type: string
+      weblink:
+        description: 物流官网
+        type: string
     type: object
   schemas.PasswordData:
     properties:
@@ -129,10 +247,19 @@ definitions:
   schemas.PickUp:
     properties:
       address:
-        example: 广东省深圳市福田区沙尾街道金地三路
+        example: 广东省深圳市福田区沙尾街道金地三路888号
         type: string
       id:
         example: "12345678"
+        type: string
+      status:
+        example: 0
+        type: integer
+    type: object
+  schemas.PickUpRequest:
+    properties:
+      address:
+        example: 广东省深圳市福田区沙尾街道金地三路888号
         type: string
       status:
         example: 0
@@ -157,6 +284,20 @@ definitions:
       message:
         description: 响应信息
         example: 成功
+        type: string
+      status:
+        description: 响应状态
+        example: 200
+        type: integer
+    type: object
+  schemas.SearchLogisticsResponse:
+    properties:
+      data:
+        $ref: '#/definitions/schemas.Logistics'
+        description: 物流信息
+      message:
+        description: 响应信息
+        example: success
         type: string
       status:
         description: 响应状态
@@ -230,7 +371,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.User'
+          $ref: '#/definitions/schemas.LoginRequest'
       produces:
       - application/json
       responses:
@@ -262,10 +403,39 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/schemas.LogisticsResponse'
+            $ref: '#/definitions/schemas.SearchLogisticsResponse'
       security:
       - ApiKeyAuth: []
       summary: 物流查询
+      tags:
+      - 物流
+  /api/v1/logistics/{carrierCode}:
+    post:
+      consumes:
+      - application/json
+      description: 物流下单
+      parameters:
+      - description: 物流商代码
+        in: path
+        name: carrierCode
+        required: true
+        type: string
+      - description: 请求参数data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.LogisticsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.AddLogisticsResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: 物流下单
       tags:
       - 物流
   /api/v1/pickUp:
@@ -279,7 +449,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.PickUp'
+          $ref: '#/definitions/schemas.PickUpRequest'
       produces:
       - application/json
       responses:
@@ -352,7 +522,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.PickUp'
+          $ref: '#/definitions/schemas.PickUpRequest'
       produces:
       - application/json
       responses:

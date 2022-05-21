@@ -84,7 +84,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.User"
+                            "$ref": "#/definitions/schemas.LoginRequest"
                         }
                     }
                 ],
@@ -135,7 +135,53 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/schemas.LogisticsResponse"
+                            "$ref": "#/definitions/schemas.SearchLogisticsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/logistics/{carrierCode}": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "物流下单",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "物流"
+                ],
+                "summary": "物流下单",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "物流商代码",
+                        "name": "carrierCode",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "请求参数data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schemas.LogisticsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.AddLogisticsResponse"
                         }
                     }
                 }
@@ -166,7 +212,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.PickUp"
+                            "$ref": "#/definitions/schemas.PickUpRequest"
                         }
                     }
                 ],
@@ -247,7 +293,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.PickUp"
+                            "$ref": "#/definitions/schemas.PickUpRequest"
                         }
                     }
                 ],
@@ -508,29 +554,6 @@ const docTemplate = `{
                 }
             }
         },
-        "model.PickUp": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "type": "string"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
-                    "$ref": "#/definitions/gorm.DeletedAt"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "type": "string"
-                }
-            }
-        },
         "model.User": {
             "type": "object",
             "required": [
@@ -567,6 +590,70 @@ const docTemplate = `{
                 }
             }
         },
+        "schemas.AddLogisticsResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "物流信息",
+                    "$ref": "#/definitions/schemas.Order"
+                },
+                "message": {
+                    "description": "响应信息",
+                    "type": "string",
+                    "example": "success"
+                },
+                "status": {
+                    "description": "响应状态",
+                    "type": "integer",
+                    "example": 200
+                }
+            }
+        },
+        "schemas.CargoList": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "description": "数量",
+                    "type": "integer",
+                    "example": 5
+                },
+                "height": {
+                    "description": "高(单位默认为厘米)",
+                    "type": "number",
+                    "example": 80
+                },
+                "length": {
+                    "description": "长(单位默认为厘米)",
+                    "type": "number",
+                    "example": 100
+                },
+                "name": {
+                    "description": "货物名称",
+                    "type": "string",
+                    "example": "货物名称"
+                },
+                "uint": {
+                    "description": "单位， 如个、台、件",
+                    "type": "string",
+                    "example": "件"
+                },
+                "volume": {
+                    "description": "宽(单位默认为厘米)",
+                    "type": "number",
+                    "example": 480000
+                },
+                "weight": {
+                    "description": "重量(单位:kg)",
+                    "type": "number",
+                    "example": 60
+                },
+                "width": {
+                    "description": "宽(单位默认为厘米)",
+                    "type": "number",
+                    "example": 60
+                }
+            }
+        },
         "schemas.GetUserInfoResponse": {
             "type": "object",
             "properties": {
@@ -591,6 +678,21 @@ const docTemplate = `{
                     "description": "用户数量",
                     "type": "integer",
                     "example": 1
+                }
+            }
+        },
+        "schemas.LoginRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "description": "密码",
+                    "type": "string",
+                    "example": "****"
+                },
+                "username": {
+                    "description": "用户名",
+                    "type": "string",
+                    "example": "name"
                 }
             }
         },
@@ -627,8 +729,16 @@ const docTemplate = `{
         "schemas.Logistics": {
             "type": "object",
             "properties": {
+                "barcode": {
+                    "description": "运单号",
+                    "type": "string"
+                },
                 "carrier_code": {
                     "description": "物流公司代码",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "订单号",
                     "type": "string"
                 },
                 "trackInfo": {
@@ -644,22 +754,108 @@ const docTemplate = `{
                 }
             }
         },
-        "schemas.LogisticsResponse": {
+        "schemas.LogisticsRequest": {
             "type": "object",
             "properties": {
-                "data": {
-                    "description": "物流信息",
-                    "$ref": "#/definitions/schemas.Logistics"
+                "cargoList": {
+                    "description": "货物明细",
+                    "$ref": "#/definitions/schemas.CargoList"
                 },
-                "message": {
-                    "description": "响应信息",
+                "delivery_address": {
+                    "description": "到件方详细地址",
                     "type": "string",
-                    "example": "success"
+                    "example": "沙头街道皇庭广场"
                 },
-                "status": {
-                    "description": "响应状态",
+                "delivery_city": {
+                    "description": "到件方所在地级行政区名称",
+                    "type": "string",
+                    "example": "深圳市"
+                },
+                "delivery_contact": {
+                    "description": "到件方联系人",
+                    "type": "string",
+                    "example": "李华"
+                },
+                "delivery_county": {
+                    "description": "到件方所在县/区级行政区名称",
+                    "type": "string",
+                    "example": "福田区"
+                },
+                "delivery_province": {
+                    "description": "到件方所在省级行政区名称",
+                    "type": "string",
+                    "example": "广东省"
+                },
+                "delivery_tel": {
+                    "description": "到件方联系电话",
+                    "type": "string",
+                    "example": "18452154695"
+                },
+                "expected_pick_up_time": {
+                    "description": "希望上门取件时间。格式：yyyy-MM-dd HH:mm:ss。isDocall=1时有效，其中，预约时间超过晚8点，会自动约成第二天。",
+                    "type": "string",
+                    "example": "2022-05-21 00:00:00"
+                },
+                "is_do_call": {
+                    "description": "是否需要上门,0-不下call，不会通知小哥上门；1-下call，默认2小时内上门",
                     "type": "integer",
-                    "example": 200
+                    "example": 1
+                },
+                "pay_method": {
+                    "description": "付款方式(邮费)：1.寄方付2.收方付3.第三方付",
+                    "type": "integer",
+                    "example": 1
+                },
+                "remark": {
+                    "type": "string",
+                    "example": "备注"
+                },
+                "send_address": {
+                    "description": "寄件方详细地址",
+                    "type": "string",
+                    "example": "粤海街道科兴科学园"
+                },
+                "send_city": {
+                    "description": "寄件方所在地级行政区名称",
+                    "type": "string",
+                    "example": "深圳市"
+                },
+                "send_contact": {
+                    "description": "寄件方联系人",
+                    "type": "string",
+                    "example": "张湘"
+                },
+                "send_county": {
+                    "description": "寄件人所在县/区级行政区名称",
+                    "type": "string",
+                    "example": "南山区"
+                },
+                "send_province": {
+                    "description": "寄件方所在省级行政区名称",
+                    "type": "string",
+                    "example": "广东省"
+                },
+                "send_tel": {
+                    "description": "寄件方联系电话",
+                    "type": "string",
+                    "example": "18452154695"
+                }
+            }
+        },
+        "schemas.Order": {
+            "type": "object",
+            "properties": {
+                "barcode": {
+                    "description": "运单号",
+                    "type": "string"
+                },
+                "carrier_code": {
+                    "description": "物流公司代码",
+                    "type": "string"
+                },
+                "weblink": {
+                    "description": "物流官网",
+                    "type": "string"
                 }
             }
         },
@@ -678,11 +874,24 @@ const docTemplate = `{
             "properties": {
                 "address": {
                     "type": "string",
-                    "example": "广东省深圳市福田区沙尾街道金地三路"
+                    "example": "广东省深圳市福田区沙尾街道金地三路888号"
                 },
                 "id": {
                     "type": "string",
                     "example": "12345678"
+                },
+                "status": {
+                    "type": "integer",
+                    "example": 0
+                }
+            }
+        },
+        "schemas.PickUpRequest": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "example": "广东省深圳市福田区沙尾街道金地三路888号"
                 },
                 "status": {
                     "type": "integer",
@@ -716,6 +925,25 @@ const docTemplate = `{
                     "description": "响应信息",
                     "type": "string",
                     "example": "成功"
+                },
+                "status": {
+                    "description": "响应状态",
+                    "type": "integer",
+                    "example": 200
+                }
+            }
+        },
+        "schemas.SearchLogisticsResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "description": "物流信息",
+                    "$ref": "#/definitions/schemas.Logistics"
+                },
+                "message": {
+                    "description": "响应信息",
+                    "type": "string",
+                    "example": "success"
                 },
                 "status": {
                     "description": "响应状态",

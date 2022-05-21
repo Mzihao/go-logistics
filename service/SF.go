@@ -19,7 +19,7 @@ func (s ShunFengService) SearchRouter(barcode string) (int, map[string]interface
 }
 
 func (s ShunFengService) CreateOrder() (int, map[string]string) {
-	result := make(map[string]interface{})
+	result := make(map[string]string)
 	result["weblink"] = "https://www.sf-express.com/"
 	result["carrier_code"] = "sf-express"
 	result["barcode "] = "SF1234567890"

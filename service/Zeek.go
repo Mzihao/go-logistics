@@ -17,7 +17,7 @@ type ZeekServer struct{}
 
 func (z ZeekServer) SearchRouter(barcode string) (int, map[string]interface{}) {
 	reqUrl := "https://ap1-zeek2door-api.ks-it.co/Index/get_order_log"
-	
+
 	result := make(map[string]interface{})
 	result["weblink"] = "https://www.zeek.one"
 	result["carrier_code"] = "zeek"
@@ -72,8 +72,8 @@ func (z ZeekServer) SearchRouter(barcode string) (int, map[string]interface{}) {
 		for i := 0; i < int(data.Num); i++ {
 			if gjson.Get(dataStr, "data."+strconv.Itoa(i)+".detail").Str != "" {
 				trackInfo = append(trackInfo, map[string]string{
-					"Date": gjson.Get(dataStr, "data."+strconv.Itoa(i)+".addtime").Str,
-					"StatusDescription": gjson.Get(dataStr, "data."+strconv.Itoa(i)+".detail").Str
+					"Date":              gjson.Get(dataStr, "data."+strconv.Itoa(i)+".addtime").Str,
+					"StatusDescription": gjson.Get(dataStr, "data."+strconv.Itoa(i)+".detail").Str,
 				})
 			}
 		}

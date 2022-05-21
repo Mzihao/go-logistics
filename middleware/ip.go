@@ -1,13 +1,11 @@
 package middleware
 
-
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gomodule/redigo/redis"
 	"net/http"
 	"strings"
-	"log"
 	"time"
-	"github.com/gomodule/redigo/redis"
 )
 
 var (
@@ -65,7 +63,6 @@ func newRedisPool() *redis.Pool {
 		Dial: func() (redis.Conn, error) {
 			c, err := redis.Dial("tcp", redisHost)
 			if err != nil {
-				fmt.Println(err)
 				return nil, err
 			}
 			return c, nil

@@ -5,6 +5,7 @@ import (
 	"go-logistics/model"
 	"go-logistics/service"
 	"go-logistics/utils/errmsg"
+	"go-logistics/utils/validator"
 	"net/http"
 )
 
@@ -119,10 +120,10 @@ func PlaceOrder(c *gin.Context) {
 	}
 
 	// 下单
-	code, data := server.CreateOrder()
+	code, result := server.CreateOrder()
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
-		"data":    data,
+		"data":    result,
 		"message": errmsg.GetErrMsg(code),
 	})
 }
