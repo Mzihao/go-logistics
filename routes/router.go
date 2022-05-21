@@ -48,7 +48,7 @@ func InitRouter() {
 
 		// 物流服务
 		auth.GET("logistics/:barcode", v1.QueryExpress)
-		auth.POST("logistics/:barcode", v1.PlaceOrder)
+		auth.POST("logistics/:carrierCode", v1.PlaceOrder)
 		// auth.DELETE("logistics/:barcode", v1.QueryExpress)
 
 		// 自提物流

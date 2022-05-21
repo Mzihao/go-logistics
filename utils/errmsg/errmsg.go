@@ -21,7 +21,7 @@ const (
 )
 
 var codeMsg = map[int]string{
-	Success:             "OK",
+	Success:             "SUCCESS",
 	Error:               "FAIL",
 	ErrorUsernameUsed:   "用户名已存在！",
 	ErrorPasswordWrong:  "密码错误",
