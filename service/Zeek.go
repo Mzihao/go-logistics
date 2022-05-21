@@ -71,7 +71,10 @@ func (z ZeekServer) SearchRouter(barcode string) (int, map[string]interface{}) {
 		data := gjson.Get(dataStr, "data.#")
 		for i := 0; i < int(data.Num); i++ {
 			if gjson.Get(dataStr, "data."+strconv.Itoa(i)+".detail").Str != "" {
-				trackInfo = append(trackInfo, map[string]string{"Date": gjson.Get(dataStr, "data."+strconv.Itoa(i)+".addtime").Str, "StatusDescription": gjson.Get(dataStr, "data."+strconv.Itoa(i)+".detail").Str})
+				trackInfo = append(trackInfo, map[string]string{
+					"Date": gjson.Get(dataStr, "data."+strconv.Itoa(i)+".addtime").Str,
+					"StatusDescription": gjson.Get(dataStr, "data."+strconv.Itoa(i)+".detail").Str
+				})
 			}
 		}
 	}
