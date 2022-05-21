@@ -16,7 +16,7 @@ import (
 // @Description 后台登陆
 // @Accept  json
 // @Produce json
-// @Param data body model.User true "请求参数data"
+// @Param data body schemas.LoginRequest true "请求参数data"
 // @Router /api/v1/login [post]
 // @Success 200 {object} schemas.LoginResponse
 func Login(c *gin.Context) {

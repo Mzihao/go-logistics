@@ -79,6 +79,7 @@ func QueryExpress(c *gin.Context) {
 // @Accept  json
 // @Produce json
 // @Param   carrierCode     path    string     true        "物流商代码"
+// @Param data body schemas.LogisticsRequest true "请求参数data"
 // @Router /api/v1/logistics/{carrierCode} [post]
 // @Success 200 {object} schemas.AddLogisticsResponse
 // @Security ApiKeyAuth

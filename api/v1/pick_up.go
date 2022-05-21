@@ -9,19 +9,13 @@ import (
 	"net/http"
 )
 
-//type PickUp interface{
-//	SearchRouter(id string) (int, map[string]interface{})
-//	CreateOrder(address string) (int, map[string]interface{})
-//	UpdateOrder(data *PickUp)
-//}
-
 // CreateOrder 自提物流下单
 // @Tags 自提物流
 // @Summary 自提物流下单
 // @Description 自提物流下单
 // @Accept  json
 // @Produce json
-// @Param data body model.PickUp true "请求参数data"
+// @Param data body schemas.PickUpRequest true "请求参数data"
 // @Router /api/v1/pickUp [post]
 // @Success 200 {object} schemas.PickUpResponse
 // @Security ApiKeyAuth
@@ -84,7 +78,7 @@ func SearchRouter(c *gin.Context) {
 // @Accept  json
 // @Produce json
 // @Param   id     path    string     true        "物流单号"
-// @Param data body model.PickUp true "请求参数data"
+// @Param data body schemas.PickUpRequest true "请求参数data"
 // @Router /api/v1/pickUp/{id} [put]
 // @Success 200 {object} schemas.PickUpResponse
 // @Security ApiKeyAuth
