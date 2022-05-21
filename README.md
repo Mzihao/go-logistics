@@ -15,6 +15,12 @@ go 1.17
 6. [logrus](https://github.com/sirupsen/logrus): 日志服务。
 7. [viper](https://github.com/spf13/viper): 配置文件解析。
 
+## 功能模块
+1. 用户注册
+2. 物流查询
+3. 物流下单
+4. ...
+
 ## Swagger
 #### 下载Swag for Go
 ```shell
