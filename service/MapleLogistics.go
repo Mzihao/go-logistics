@@ -75,6 +75,7 @@ func (m MapleLogisticsServer) SearchRouter(barcode string) (int, map[string]inte
 		trackInfo = append(trackInfo, map[string]string{"Date": strings.Replace(messageList[3*i+1], "/", "-", -1), "StatusDescription": messageList[3*i+2]})
 	}
 	trackInfo = rev(trackInfo)
+	result["barcode"] = barcode
 	result["weblink"] = "https://www.25431010.tw/Search.php"
 	result["carrier_code"] = "bld-express"
 	result["trackInfo"] = trackInfo

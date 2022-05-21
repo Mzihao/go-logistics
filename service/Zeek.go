@@ -16,12 +16,12 @@ import (
 type ZeekServer struct{}
 
 func (z ZeekServer) SearchRouter(barcode string) (int, map[string]interface{}) {
-	// 自动更新cookie
 	reqUrl := "https://ap1-zeek2door-api.ks-it.co/Index/get_order_log"
-
+	
 	result := make(map[string]interface{})
 	result["weblink"] = "https://www.zeek.one"
 	result["carrier_code"] = "zeek"
+	result["barcode"] = barcode
 
 	payload := &bytes.Buffer{}
 	writer := multipart.NewWriter(payload)
@@ -83,6 +83,7 @@ func (z ZeekServer) SearchRouter(barcode string) (int, map[string]interface{}) {
 		id := utils.GetSnowflakeId()
 		data := model.Logistics{ID: id, TrackingNumber: barcode, CarrierCode: "zeek"}
 		model.CreateLogistics(&data)
+		result["id"] = id
 	} else {
 		result["id"] = logistics.ID
 	}

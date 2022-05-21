@@ -8,8 +8,12 @@ import (
 	"net/http"
 )
 
-type Logistics interface {
+type SearchRouterInterface interface {
 	SearchRouter(barcode string) (int, map[string]interface{})
+}
+
+type PlaceOrderInterface interface {
+	CreateOrder() (int, map[string]string)
 }
 
 // QueryExpress 物流查询
@@ -21,7 +25,7 @@ type Logistics interface {
 // @Param   barcode     path    string     true        "物流单号"
 // @Param   carrierCode     query    string     false        "物流公司代码"
 // @Router /api/v1/logistics/{barcode} [get]
-// @Success 200 {object} schemas.LogisticsResponse
+// @Success 200 {object} schemas.SearchLogisticsResponse
 // @Security ApiKeyAuth
 func QueryExpress(c *gin.Context) {
 	barcode := c.Param("barcode")
@@ -42,10 +46,10 @@ func QueryExpress(c *gin.Context) {
 	}
 
 	//定义服务转发映射
-	serviceMap := make(map[string]Logistics)
+	serviceMap := make(map[string]SearchRouterInterface)
 	serviceMap["bld-express"] = service.MapleLogisticsServer{}
 	serviceMap["zeek"] = service.ZeekServer{}
-	// ...
+	// ...可扩展
 
 	// 获取服务
 	server, err := serviceMap[carrierCode]
@@ -68,38 +72,56 @@ func QueryExpress(c *gin.Context) {
 	})
 }
 
-//func PlaceOrder(c *gin.Context) {
-//	carrierCode := c.Param("carrierCode")
-//	var data model.Logistics
-//	var msg string
-//	var validCode int
-//	_ = c.ShouldBindJSON(&data)
-//
-//	msg, validCode = validator.Validate(&data)
-//	if validCode != errmsg.Success {
-//		c.JSON(
-//			http.StatusOK, gin.H{
-//				"status":  validCode,
-//				"message": msg,
-//			},
-//		)
-//		c.Abort()
-//		return
-//	}
-//
-//	//定义服务转发映射
-//	serviceMap := make(map[string]Logistics)
-//	serviceMap["bld-express"] = service.MapleLogistics{}
-//	// ...
-//
-//	// 获取服务
-//	server, err := serviceMap[carrierCode]
-//	if !err {
-//		c.JSON(http.StatusOK, gin.H{
-//			"status":  4003,
-//			"data":    nil,
-//			"message": errmsg.GetErrMsg(4003),
-//		})
-//		return
-//	}
-//}
+// PlaceOrder 物流下单
+// @Tags 物流
+// @Summary 物流下单
+// @Description 物流下单
+// @Accept  json
+// @Produce json
+// @Param   carrierCode     path    string     true        "物流商代码"
+// @Router /api/v1/logistics/{carrierCode} [post]
+// @Success 200 {object} schemas.AddLogisticsResponse
+// @Security ApiKeyAuth
+func PlaceOrder(c *gin.Context) {
+	carrierCode := c.Param("carrierCode")
+	var data model.Logistics
+	var msg string
+	var validCode int
+	_ = c.ShouldBindJSON(&data)
+
+	msg, validCode = validator.Validate(&data)
+	if validCode != errmsg.Success {
+		c.JSON(
+			http.StatusOK, gin.H{
+				"status":  validCode,
+				"message": msg,
+			},
+		)
+		c.Abort()
+		return
+	}
+
+	//定义服务转发映射
+	serviceMap := make(map[string]PlaceOrderInterface)
+	serviceMap["sf-express"] = service.ShunFengService{}
+	// ...可扩展
+
+	// 获取服务
+	server, err := serviceMap[carrierCode]
+	if !err {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  4003,
+			"data":    nil,
+			"message": errmsg.GetErrMsg(4003),
+		})
+		return
+	}
+
+	// 下单
+	code, data := server.CreateOrder()
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"data":    data,
+		"message": errmsg.GetErrMsg(code),
+	})
+}

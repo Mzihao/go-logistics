@@ -36,15 +36,29 @@ type TrackInfo struct {
 }
 
 type Logistics struct {
+	Id          string      `json:"id"`           // 订单号
+	Barcode     string      `json:"barcode"`      // 运单号
 	CarrierCode string      `json:"carrier_code"` // 物流公司代码
 	TrackInfo   []TrackInfo `json:"trackInfo"`    // 物流时效
 	Weblink     string      `json:"weblink"`      // 物流官网
 }
 
-type LogisticsResponse struct {
+type SearchLogisticsResponse struct {
 	Status  int       `json:"status" form:"status" example:"200"`       //响应状态
 	Message string    `json:"message" form:"message" example:"success"` //响应信息
 	Data    Logistics // 物流信息
+}
+
+type Order struct {
+	Barcode     string      `json:"barcode"`      // 运单号
+	CarrierCode string      `json:"carrier_code"` // 物流公司代码
+	Weblink     string      `json:"weblink"`      // 物流官网
+}
+
+type AddLogisticsResponse struct {
+	Status  int       `json:"status" form:"status" example:"200"`       //响应状态
+	Message string    `json:"message" form:"message" example:"success"` //响应信息
+	Data    Order // 物流信息
 }
 
 type LoginResponse struct {
