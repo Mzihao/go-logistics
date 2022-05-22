@@ -43,3 +43,8 @@ go run main.go
 [http://127.0.0.1:9090](http://127.0.0.1:9090)
 
 [http://127.0.0.1:9090/swagger/index.html ](http://127.0.0.1:9090/swagger/index.html )
+
+## 演示
+#### 测试页面
+![demo1](https://github.com/Mzihao/go-logistics/blob/master/demo/demo.png)
+![demo2](https://github.com/Mzihao/go-logistics/blob/master/demo/demo2.png)
