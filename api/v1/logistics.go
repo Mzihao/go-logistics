@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"go-logistics/model"
 	"go-logistics/service"
@@ -104,8 +103,6 @@ func PlaceOrder(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(data)
-
 	//定义服务转发映射
 	serviceMap := make(map[string]PlaceOrderInterface)
 	serviceMap["sf-express"] = service.ShunFengService{}
@@ -113,7 +110,6 @@ func PlaceOrder(c *gin.Context) {
 
 	// 获取服务
 	server, err := serviceMap[carrierCode]
-	fmt.Println(carrierCode, server, err)
 	if !err {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  4003,
