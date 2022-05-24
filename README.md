@@ -2,6 +2,11 @@
 
 ## 描述
 一个聚合多个物流公司的，集成物流下单，查询的服务。
+已有物流商:
+[zeek](https://www.zeek.one/hk): 斑马到家（HK）
+[Maple Logistics](http://www.25431010.tw/Search.php)：枫叶物流（TW）
+[sf-express](https://www.sf-express.com/): 顺丰(未完善)
+[kuaidi100](https://www.kuaidi100.com):快递100（国内聚合）
 
 ## Version
 go 1.17
