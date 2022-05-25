@@ -50,6 +50,7 @@ func QueryExpress(c *gin.Context) {
 	serviceMap := make(map[string]SearchRouterInterface)
 	serviceMap["bld-express"] = service.MapleLogisticsServer{}
 	serviceMap["zeek"] = service.ZeekServer{}
+	serviceMap["sf-express"] = service.ShunFengService{}
 	// ...可扩展
 
 	// 获取服务
