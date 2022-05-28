@@ -51,6 +51,7 @@ func QueryExpress(c *gin.Context) {
 	serviceMap["bld-express"] = service.MapleLogisticsServer{}
 	serviceMap["zeek"] = service.ZeekServer{}
 	serviceMap["sf-express"] = service.ShunFengService{}
+	serviceMap["kuaidi100"] = service.Kuaidi100Server{}
 	// ...可扩展
 
 	// 获取服务
