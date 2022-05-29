@@ -2,7 +2,6 @@ package service
 
 import (
 	"bytes"
-	"fmt"
 	"github.com/tidwall/gjson"
 	"go-logistics/model"
 	"go-logistics/utils"
@@ -29,7 +28,6 @@ func (z ZeekServer) SearchRouter(barcode string) (int, map[string]interface{}) {
 	_ = writer.WriteField("language", "zh_HK")
 	err := writer.Close()
 	if err != nil {
-		fmt.Println(err)
 		return 500, result
 	}
 
@@ -37,7 +35,6 @@ func (z ZeekServer) SearchRouter(barcode string) (int, map[string]interface{}) {
 	req, err := http.NewRequest("POST", reqUrl, payload)
 
 	if err != nil {
-		fmt.Println(err)
 		return 500, result
 	}
 	req.Header.Add("Accept", "application/json, text/plain, */*")
@@ -49,14 +46,12 @@ func (z ZeekServer) SearchRouter(barcode string) (int, map[string]interface{}) {
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 	res, err := client.Do(req)
 	if err != nil {
-		fmt.Println(err)
 		return 500, result
 	}
 	defer res.Body.Close()
 
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		fmt.Println(err)
 		return 500, result
 	}
 	dataStr := string(body)

@@ -74,7 +74,7 @@ func (m MapleLogisticsServer) SearchRouter(barcode string) (int, map[string]inte
 	for i := 0; i < len(messageList)/3; i++ {
 		trackInfo = append(trackInfo, map[string]string{"Date": strings.Replace(messageList[3*i+1], "/", "-", -1), "StatusDescription": messageList[3*i+2]})
 	}
-	trackInfo = rev(trackInfo)
+	trackInfo = utils.Rev(trackInfo)
 	result["barcode"] = barcode
 	result["weblink"] = "https://www.25431010.tw/Search.php"
 	result["carrier_code"] = "bld-express"
@@ -113,12 +113,4 @@ func getTik(reqUrl string, client *http.Client) string {
 	myRegex := regexp.MustCompile(`<input name="tik" id="tik" type="hidden" value="(.*?)" />`)
 	found := myRegex.FindAllStringSubmatch(string(body), -1)
 	return found[0][1]
-}
-
-// rev 切片反转
-func rev(slice []map[string]string) []map[string]string {
-	for i, j := 0, len(slice)-1; i < j; i, j = i+1, j-1 {
-		slice[i], slice[j] = slice[j], slice[i]
-	}
-	return slice
 }
