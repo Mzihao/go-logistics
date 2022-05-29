@@ -14,13 +14,13 @@ type Kuaidi100Server struct{}
 
 func (k Kuaidi100Server) SearchRouter(barcode string) (int, map[string]interface{}) {
 	result := make(map[string]interface{})
-	posttype, postid := getCodeAndNum(barcode)
+	client := &http.Client{}
+	posttype, postid := getCodeAndNum(barcode, client)
 	if posttype == "" {
 		return 500, result
 	}
 	reqUrl := "https://www.kuaidi100.com/query?type=" + posttype + "&postid=" + postid + "&temp=0.8926864614539474&phone="
 
-	client := &http.Client{}
 	req, err := http.NewRequest("GET", reqUrl, nil)
 
 	if err != nil {
@@ -76,9 +76,8 @@ func (k Kuaidi100Server) SearchRouter(barcode string) (int, map[string]interface
 	return 200, result
 }
 
-func getCodeAndNum(id string) (code string, num string) {
+func getCodeAndNum(id string, client *http.Client) (code string, num string) {
 	url := "https://www.kuaidi100.com/autonumber/autoComNum?resultv2=1&text=" + id
-	client := &http.Client{}
 	req, err := http.NewRequest("POST", url, nil)
 	if err != nil {
 		return "", ""
