@@ -4,11 +4,11 @@ server:
   port: 9090
 datasource:
   driverName: mysql
-  host: 119.23.40.47
+  host: 127.0.0.1
   port: 3306
   database: logistics-go
   username: root
-  password: ngt777
+  password: 1234
   charset: utf8
   loc: Asia/Shanghai
 logistics:

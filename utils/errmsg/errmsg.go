@@ -18,6 +18,9 @@ const (
 	IncorrectLength = 4001
 	NotFound        = 4002
 	NotSupport      = 4003
+
+	// code= 500...
+	VerificationFailure = 5001
 )
 
 var codeMsg = map[int]string{
@@ -34,6 +37,7 @@ var codeMsg = map[int]string{
 	IncorrectLength:     "物流单号长度不正确",
 	NotFound:            "查无此单号",
 	NotSupport:          "暂未支持该物流公司",
+	VerificationFailure: "数据校验失败",
 }
 
 func GetErrMsg(code int) string {

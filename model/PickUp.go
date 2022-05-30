@@ -8,7 +8,7 @@ import (
 type PickUp struct {
 	gorm.Model
 	ID      string `gorm:"primary_key;auto_increment" json:"id"`
-	Status  uint   `gorm:"type:int" json:"status"`
+	Status  uint   `gorm:"type:int" json:"status" validate:"oneof=0 1 2 3 4" label:"状态码"`
 	Address string `gorm:"type:varchar(500)" json:"address"`
 }
 

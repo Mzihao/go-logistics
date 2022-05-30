@@ -10,10 +10,10 @@ import (
 	"strconv"
 )
 
-// AddUser 添加用户
+// AddUser 用户注册
 // @Tags 用户
-// @Summary 添加用户
-// @Description 添加用户
+// @Summary 用户注册
+// @Description 用户注册
 // @Accept  json
 // @Produce json
 // @Param data body model.User true "请求参数data"
