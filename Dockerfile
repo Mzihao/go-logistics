@@ -5,7 +5,7 @@ ENV GO111MODULE=on \
     CGO_ENABLED=0 \
     GOOS=linux \
     GOARCH=amd64 \
-	GOPROXY="https://goproxy.cn,direct"
+    GOPROXY="https://goproxy.cn,direct"
     
 ## 设置工作目录
 WORKDIR /src/go-logistics
