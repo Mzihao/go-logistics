@@ -51,5 +51,5 @@ go run main.go
 
 ## 演示
 #### 测试页面
-![demo1](https://github.com/Mzihao/go-logistics/blob/master/demo/demo.png)
-![demo2](https://github.com/Mzihao/go-logistics/blob/master/demo/demo2.png)
+![demo1](https://raw.githubusercontent.com/Mzihao/go-logistics/master/demo/demo.png)
+![demo2](https://raw.githubusercontent.com/Mzihao/go-logistics/master/demo/demo2.png)
