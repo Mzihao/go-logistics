@@ -16,7 +16,7 @@ import (
 // @Description 用户注册
 // @Accept  json
 // @Produce json
-// @Param data body model.User true "请求参数data"
+// @Param data body schemas.UserRegistered true "请求参数data"
 // @Router /api/v1/user/add [post]
 // @Success 200 {object} schemas.RegularResponse
 func AddUser(c *gin.Context) {

@@ -1,38 +1,4 @@
 definitions:
-  gorm.DeletedAt:
-    properties:
-      time:
-        type: string
-      valid:
-        description: Valid is true if Time is not NULL
-        type: boolean
-    type: object
-  model.User:
-    properties:
-      createdAt:
-        type: string
-      deletedAt:
-        $ref: '#/definitions/gorm.DeletedAt'
-      id:
-        type: integer
-      password:
-        maxLength: 120
-        minLength: 6
-        type: string
-      role:
-        minimum: 2
-        type: integer
-      updatedAt:
-        type: string
-      username:
-        maxLength: 12
-        minLength: 4
-        type: string
-    required:
-    - password
-    - role
-    - username
-    type: object
   schemas.AddLogisticsResponse:
     properties:
       data:
@@ -324,11 +290,27 @@ definitions:
         example: name
         type: string
     type: object
+  schemas.UserRegistered:
+    properties:
+      password:
+        description: 密码
+        example: '****'
+        type: string
+      role:
+        description: 角色码
+        example: 2
+        type: integer
+      username:
+        description: 用户名
+        example: name
+        type: string
+    type: object
 info:
   contact:
-    name: martin
+    email: pimpkin_mak@163.com
+    name: Mzihao
   description: 聚合物流服务
-  title: Logistics Query Api
+  title: Logistics Open Api
   version: "1.0"
 paths:
   /api/v1/admin/changePassword/{id}:
@@ -612,14 +594,14 @@ paths:
     post:
       consumes:
       - application/json
-      description: 添加用户
+      description: 用户注册
       parameters:
       - description: 请求参数data
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.User'
+          $ref: '#/definitions/schemas.UserRegistered'
       produces:
       - application/json
       responses:
@@ -627,7 +609,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/schemas.RegularResponse'
-      summary: 添加用户
+      summary: 用户注册
       tags:
       - 用户
   /api/v1/users:

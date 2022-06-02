@@ -2,9 +2,10 @@
     "swagger": "2.0",
     "info": {
         "description": "聚合物流服务",
-        "title": "Logistics Query Api",
+        "title": "Logistics Open Api",
         "contact": {
-            "name": "martin"
+            "name": "Mzihao",
+            "email": "pimpkin_mak@163.com"
         },
         "version": "1.0"
     },
@@ -335,7 +336,7 @@
         },
         "/api/v1/user/add": {
             "post": {
-                "description": "添加用户",
+                "description": "用户注册",
                 "consumes": [
                     "application/json"
                 ],
@@ -345,7 +346,7 @@
                 "tags": [
                     "用户"
                 ],
-                "summary": "添加用户",
+                "summary": "用户注册",
                 "parameters": [
                     {
                         "description": "请求参数data",
@@ -353,7 +354,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.User"
+                            "$ref": "#/definitions/schemas.UserRegistered"
                         }
                     }
                 ],
@@ -533,54 +534,6 @@
         }
     },
     "definitions": {
-        "gorm.DeletedAt": {
-            "type": "object",
-            "properties": {
-                "time": {
-                    "type": "string"
-                },
-                "valid": {
-                    "description": "Valid is true if Time is not NULL",
-                    "type": "boolean"
-                }
-            }
-        },
-        "model.User": {
-            "type": "object",
-            "required": [
-                "password",
-                "role",
-                "username"
-            ],
-            "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
-                    "$ref": "#/definitions/gorm.DeletedAt"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "password": {
-                    "type": "string",
-                    "maxLength": 120,
-                    "minLength": 6
-                },
-                "role": {
-                    "type": "integer",
-                    "minimum": 2
-                },
-                "updatedAt": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string",
-                    "maxLength": 12,
-                    "minLength": 4
-                }
-            }
-        },
         "schemas.AddLogisticsResponse": {
             "type": "object",
             "properties": {
@@ -963,6 +916,26 @@
                     "description": "角色码",
                     "type": "integer",
                     "example": 1
+                },
+                "username": {
+                    "description": "用户名",
+                    "type": "string",
+                    "example": "name"
+                }
+            }
+        },
+        "schemas.UserRegistered": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "description": "密码",
+                    "type": "string",
+                    "example": "****"
+                },
+                "role": {
+                    "description": "角色码",
+                    "type": "integer",
+                    "example": 2
                 },
                 "username": {
                     "description": "用户名",

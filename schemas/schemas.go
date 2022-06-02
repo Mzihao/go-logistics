@@ -19,6 +19,12 @@ type UserInfoData struct {
 	Role     int    `json:"role" form:"role" example:"1"`            // 角色码
 }
 
+type UserRegistered struct {
+	Username string `json:"username" form:"username" example:"name"` // 用户名
+	Password string `json:"password" form:"password" example:"****"` //密码
+	Role     int    `json:"role" form:"role" example:"2"`            // 角色码
+}
+
 type GetUserInfoResponse struct {
 	Status  int            `json:"status" form:"status" example:"200"`  //响应状态
 	Data    []UserInfoData `json:"data" form:"data"`                    //用户信息

@@ -11,7 +11,8 @@ const docTemplate = `{
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
         "contact": {
-            "name": "martin"
+            "name": "Mzihao",
+            "email": "pimpkin_mak@163.com"
         },
         "version": "{{.Version}}"
     },
@@ -344,7 +345,7 @@ const docTemplate = `{
         },
         "/api/v1/user/add": {
             "post": {
-                "description": "添加用户",
+                "description": "用户注册",
                 "consumes": [
                     "application/json"
                 ],
@@ -354,7 +355,7 @@ const docTemplate = `{
                 "tags": [
                     "用户"
                 ],
-                "summary": "添加用户",
+                "summary": "用户注册",
                 "parameters": [
                     {
                         "description": "请求参数data",
@@ -362,7 +363,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.User"
+                            "$ref": "#/definitions/schemas.UserRegistered"
                         }
                     }
                 ],
@@ -542,54 +543,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "gorm.DeletedAt": {
-            "type": "object",
-            "properties": {
-                "time": {
-                    "type": "string"
-                },
-                "valid": {
-                    "description": "Valid is true if Time is not NULL",
-                    "type": "boolean"
-                }
-            }
-        },
-        "model.User": {
-            "type": "object",
-            "required": [
-                "password",
-                "role",
-                "username"
-            ],
-            "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
-                    "$ref": "#/definitions/gorm.DeletedAt"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "password": {
-                    "type": "string",
-                    "maxLength": 120,
-                    "minLength": 6
-                },
-                "role": {
-                    "type": "integer",
-                    "minimum": 2
-                },
-                "updatedAt": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string",
-                    "maxLength": 12,
-                    "minLength": 4
-                }
-            }
-        },
         "schemas.AddLogisticsResponse": {
             "type": "object",
             "properties": {
@@ -979,6 +932,26 @@ const docTemplate = `{
                     "example": "name"
                 }
             }
+        },
+        "schemas.UserRegistered": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "description": "密码",
+                    "type": "string",
+                    "example": "****"
+                },
+                "role": {
+                    "description": "角色码",
+                    "type": "integer",
+                    "example": 2
+                },
+                "username": {
+                    "description": "用户名",
+                    "type": "string",
+                    "example": "name"
+                }
+            }
         }
     },
     "securityDefinitions": {
@@ -996,7 +969,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Logistics Query Api",
+	Title:            "Logistics Open Api",
 	Description:      "聚合物流服务",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
