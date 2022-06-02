@@ -6,13 +6,13 @@ import (
 	"go-logistics/utils"
 )
 
-// @title Logistics Query Api
+// @title Logistics Open Api
 // @version 1.0
 // @description 聚合物流服务
 
-// @contact.name   martin
+// @contact.name   Mzihao
 // @contact.url
-// @contact.email
+// @contact.email pimpkin_mak@163.com
 
 // @securityDefinitions.apikey  ApiKeyAuth
 // @in                          header
