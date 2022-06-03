@@ -50,13 +50,13 @@ func Log() gin.HandlerFunc {
 		c.Next()
 		stopTime := time.Since(startTime).Milliseconds()
 		spendTime := fmt.Sprintf("%d ms", stopTime)
-		hostName, err := os.Hostname()
-		if err != nil {
-			hostName = "unknown"
-		}
+		// hostName, err := os.Hostname()
+		// if err != nil {
+		// 	hostName = "unknown"
+		// }
 		statusCode := c.Writer.Status()
 		clientIp := c.ClientIP()
-		userAgent := c.Request.UserAgent()
+		// userAgent := c.Request.UserAgent()
 		dataSize := c.Writer.Size()
 		if dataSize < 0 {
 			dataSize = 0
@@ -65,14 +65,14 @@ func Log() gin.HandlerFunc {
 		path := c.Request.RequestURI
 
 		entry := logger.WithFields(logrus.Fields{
-			"HostName":  hostName,
+			// "HostName":  hostName,
 			"status":    statusCode,
 			"SpendTime": spendTime,
 			"Ip":        clientIp,
 			"Method":    method,
 			"Path":      path,
 			"DataSize":  dataSize,
-			"Agent":     userAgent,
+			// "Agent":     userAgent,
 		})
 		if len(c.Errors) > 0 {
 			entry.Error(c.Errors.ByType(gin.ErrorTypePrivate).String())
