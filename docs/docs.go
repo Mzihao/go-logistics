@@ -636,15 +636,23 @@ const docTemplate = `{
         },
         "schemas.LoginRequest": {
             "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
             "properties": {
                 "password": {
                     "description": "密码",
                     "type": "string",
+                    "maxLength": 120,
+                    "minLength": 6,
                     "example": "****"
                 },
                 "username": {
                     "description": "用户名",
                     "type": "string",
+                    "maxLength": 12,
+                    "minLength": 4,
                     "example": "name"
                 }
             }
@@ -814,10 +822,15 @@ const docTemplate = `{
         },
         "schemas.PasswordData": {
             "type": "object",
+            "required": [
+                "password"
+            ],
             "properties": {
                 "password": {
                     "description": "密码",
                     "type": "string",
+                    "maxLength": 120,
+                    "minLength": 6,
                     "example": "****"
                 }
             }
@@ -848,6 +861,13 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "integer",
+                    "enum": [
+                        0,
+                        1,
+                        2,
+                        3,
+                        4
+                    ],
                     "example": 0
                 }
             }
@@ -935,20 +955,30 @@ const docTemplate = `{
         },
         "schemas.UserRegistered": {
             "type": "object",
+            "required": [
+                "password",
+                "role",
+                "username"
+            ],
             "properties": {
                 "password": {
                     "description": "密码",
                     "type": "string",
+                    "maxLength": 120,
+                    "minLength": 6,
                     "example": "****"
                 },
                 "role": {
                     "description": "角色码",
                     "type": "integer",
+                    "minimum": 2,
                     "example": 2
                 },
                 "username": {
                     "description": "用户名",
                     "type": "string",
+                    "maxLength": 12,
+                    "minLength": 4,
                     "example": "name"
                 }
             }

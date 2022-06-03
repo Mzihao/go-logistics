@@ -20,9 +20,9 @@ type UserInfoData struct {
 }
 
 type UserRegistered struct {
-	Username string `json:"username" form:"username" example:"name"` // 用户名
-	Password string `json:"password" form:"password" example:"****"` //密码
-	Role     int    `json:"role" form:"role" example:"2"`            // 角色码
+	Username string `json:"username" form:"username" example:"name" validate:"required,min=4,max=12"`  // 用户名
+	Password string `json:"password" form:"password" example:"****" validate:"required,min=6,max=120"` //密码
+	Role     int    `json:"role" form:"role" example:"2" validate:"required,gte=2"`                    // 角色码
 }
 
 type GetUserInfoResponse struct {
@@ -33,12 +33,12 @@ type GetUserInfoResponse struct {
 }
 
 type PasswordData struct {
-	Password string `json:"password" form:"password" example:"****"` //密码
+	Password string `json:"password" form:"password" example:"****" validate:"required,min=6,max=120"` //密码
 }
 
 type LoginRequest struct {
-	Username string `json:"username" form:"username" example:"name"` // 用户名
-	Password string `json:"password" form:"password" example:"****"` //密码
+	Username string `json:"username" form:"username" example:"name" validate:"required,min=4,max=12"`  // 用户名
+	Password string `json:"password" form:"password" example:"****" validate:"required,min=6,max=120"` //密码
 }
 
 type TrackInfo struct {
@@ -87,7 +87,7 @@ type PickUp struct {
 }
 
 type PickUpRequest struct {
-	Status  uint   `json:"status" form:"status" example:"0"`
+	Status  uint   `json:"status" form:"status" example:"0" validate:"oneof=0 1 2 3 4" label:"状态码"`
 	Address string `json:"address" form:"address" example:"广东省深圳市福田区沙尾街道金地三路888号"`
 }
 
