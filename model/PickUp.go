@@ -1,6 +1,7 @@
 package model
 
 import (
+	"go-logistics/global"
 	"go-logistics/utils/errmsg"
 	"gorm.io/gorm"
 )
@@ -14,7 +15,7 @@ type PickUp struct {
 
 // CreatePickUp 新增自提订单
 func CreatePickUp(data *PickUp) int {
-	err := DB.Create(&data).Error
+	err := global.DB.Create(&data).Error
 	if err != nil {
 		return errmsg.Error // 500
 	}
@@ -24,7 +25,7 @@ func CreatePickUp(data *PickUp) int {
 // GetPickUp 查询单个物流信息
 func GetPickUp(id string) (string, uint, string) {
 	var pickUp PickUp
-	result := DB.Where("id = ?", id).First(&pickUp)
+	result := global.DB.Where("id = ?", id).First(&pickUp)
 	if result.RowsAffected > 0 {
 		return pickUp.ID, pickUp.Status, pickUp.Address
 	}
@@ -41,7 +42,7 @@ func EditPickUp(id string, data *PickUp) int {
 	if data.Address != "" {
 		maps["address"] = data.Address
 	}
-	err := DB.Model(&pick).Where("id = ?", id).Updates(maps).Error
+	err := global.DB.Model(&pick).Where("id = ?", id).Updates(maps).Error
 	if err != nil {
 		return errmsg.Error
 	}
@@ -51,7 +52,7 @@ func EditPickUp(id string, data *PickUp) int {
 // HasOrder 查询订单号是否存在
 func HasOrder(id string) int {
 	var pickUp PickUp
-	DB.Select("id").Where("id = ?", id).First(&pickUp)
+	global.DB.Select("id").Where("id = ?", id).First(&pickUp)
 	if pickUp.ID == "" {
 		return errmsg.NotFound //4002
 	}

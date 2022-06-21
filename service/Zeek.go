@@ -3,6 +3,7 @@ package service
 import (
 	"bytes"
 	"github.com/tidwall/gjson"
+	"go-logistics/global"
 	"go-logistics/model"
 	"go-logistics/utils"
 	"io/ioutil"
@@ -31,7 +32,7 @@ func (z ZeekServer) SearchRouter(barcode string) (int, map[string]interface{}) {
 		return 500, result
 	}
 
-	client := &http.Client{}
+	//client := &http.Client{}
 	req, err := http.NewRequest("POST", reqUrl, payload)
 
 	if err != nil {
@@ -44,7 +45,7 @@ func (z ZeekServer) SearchRouter(barcode string) (int, map[string]interface{}) {
 	req.Header.Add("Referer", "https://www.zeek.one/")
 	req.Header.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36")
 	req.Header.Set("Content-Type", writer.FormDataContentType())
-	res, err := client.Do(req)
+	res, err := global.HttpClient.Do(req)
 	if err != nil {
 		return 500, result
 	}

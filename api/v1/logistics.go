@@ -56,7 +56,7 @@ func QueryExpress(c *gin.Context) {
 
 	// 获取服务
 	// 服务不存在
-	if val, ok := serviceMap[carrierCode]; !ok {
+	if _, ok := serviceMap[carrierCode]; !ok {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  4003,
 			"data":    nil,
@@ -67,14 +67,14 @@ func QueryExpress(c *gin.Context) {
 
 	server, err := serviceMap[carrierCode]
 	//server := service.MapleLogistics{}
-	// if !err {
-	// 	c.JSON(http.StatusOK, gin.H{
-	// 		"status":  4003,
-	// 		"data":    nil,
-	// 		"message": errmsg.GetErrMsg(4003),
-	// 	})
-	// 	return
-	// }
+	if !err {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  4003,
+			"data":    nil,
+			"message": errmsg.GetErrMsg(4003),
+		})
+		return
+	}
 
 	// 查询
 	code, data := server.SearchRouter(barcode)

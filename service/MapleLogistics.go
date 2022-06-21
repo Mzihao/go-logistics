@@ -5,11 +5,11 @@ import (
 	"github.com/lestrrat-go/libxml2"
 	"github.com/lestrrat-go/libxml2/types"
 	"github.com/lestrrat-go/libxml2/xpath"
+	"go-logistics/global"
 	"go-logistics/model"
 	"go-logistics/utils"
 	"io/ioutil"
 	"net/http"
-	"net/http/cookiejar"
 	"regexp"
 	"strings"
 )
@@ -24,10 +24,10 @@ func (m MapleLogisticsServer) SearchRouter(barcode string) (int, map[string]inte
 	result := make(map[string]interface{})
 
 	// 自动更新cookie
-	var jar, _ = cookiejar.New(nil)
-	client := &http.Client{Jar: jar}
+	//var jar, _ = cookiejar.New(nil)
+	//client := &http.Client{Jar: jar}
 
-	tik := getTik(reqUrl, client)
+	tik := getTik(reqUrl, global.HttpClient)
 	payload := strings.NewReader("tik=" + tik + "&BARCODE1=" + barcode + "&BARCODE2=&BARCODE3=")
 
 	req, err := http.NewRequest("POST", reqUrl, payload)
@@ -40,7 +40,7 @@ func (m MapleLogisticsServer) SearchRouter(barcode string) (int, map[string]inte
 	req.Header.Add("Referer", "https://www.25431010.tw/Search.php")
 	req.Header.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36")
 
-	res, err := client.Do(req)
+	res, err := global.HttpClient.Do(req)
 	if err != nil {
 		fmt.Println(err)
 		return 500, nil

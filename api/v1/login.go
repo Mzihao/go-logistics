@@ -31,9 +31,9 @@ func Login(c *gin.Context) {
 		setToken(c, formData)
 	} else {
 		c.JSON(http.StatusOK, gin.H{
-			"status":  code,
-			"name":    formData.Username,
-			"id":      formData.ID,
+			"status": code,
+			//"name":    formData.Username,
+			//"id":      formData.ID,
 			"message": errmsg.GetErrMsg(code),
 			"token":   token,
 		})

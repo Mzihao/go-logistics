@@ -22,8 +22,9 @@ func InitRouter() {
 		ginSwagger.DefaultModelsExpandDepth(-1))
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	//r.Use(middleware.Log())
-	//r.Use(gin.Recovery())
+	r.Use(middleware.Log())
+	// r.Use(gin.Recovery())
+	// r.Use(middleware.AccessLog())
 	r.Use(middleware.Cors())
 
 	r.GET("/", func(c *gin.Context) {

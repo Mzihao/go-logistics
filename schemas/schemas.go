@@ -72,10 +72,13 @@ type AddLogisticsResponse struct {
 	Data    Order  // 物流信息
 }
 
+type User struct {
+}
+
 type LoginResponse struct {
-	Status  int    `json:"status" form:"status" example:"200"`   //响应状态
-	Id      uint   `json:"id" form:"id" example:"1"`             //用户id
-	Name    string `json:"name" form:"name" example:"string"`    //用户名
+	Status int `json:"status" form:"status" example:"200"` //响应状态
+	//Id      uint   `json:"id" form:"id" example:"1"`             //用户id
+	//Name    string `json:"name" form:"name" example:"string"`    //用户名
 	Message string `json:"message" form:"message" example:"成功"`  //响应信息
 	Token   string `json:"token" form:"token" example:"asdffgh"` //令牌
 }

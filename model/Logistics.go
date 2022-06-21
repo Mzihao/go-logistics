@@ -1,6 +1,7 @@
 package model
 
 import (
+	"go-logistics/global"
 	"go-logistics/utils/errmsg"
 	"gorm.io/gorm"
 )
@@ -14,7 +15,7 @@ type Logistics struct {
 
 // CreateLogistics 新增物流信息
 func CreateLogistics(data *Logistics) int {
-	err := DB.Create(&data).Error
+	err := global.DB.Create(&data).Error
 	if err != nil {
 		return errmsg.Error // 500
 	}
@@ -24,7 +25,7 @@ func CreateLogistics(data *Logistics) int {
 // GetLogisticsById 查询单个物流信息by id
 func GetLogisticsById(id string) (string, string) {
 	var logistics Logistics
-	result := DB.Where("id = ?", id).First(&logistics)
+	result := global.DB.Where("id = ?", id).First(&logistics)
 	if result.RowsAffected > 0 {
 		return logistics.TrackingNumber, logistics.CarrierCode
 	}
@@ -35,7 +36,7 @@ func GetLogisticsById(id string) (string, string) {
 func GetLogisticsByTrackingNumber(trackingNumber string, carrierCode string) (int64, Logistics) {
 	var logistics Logistics
 	//DB.Where("tracking_number = ?", trackingNumber).First(&logistics)
-	result := DB.Where(&Logistics{TrackingNumber: trackingNumber, CarrierCode: carrierCode}).First(&logistics)
+	result := global.DB.Where(&Logistics{TrackingNumber: trackingNumber, CarrierCode: carrierCode}).First(&logistics)
 	//result.RowsAffected // 返回找到的记录数
 	//result.Error        // returns error or nil
 	return result.RowsAffected, logistics

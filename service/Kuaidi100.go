@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"github.com/tidwall/gjson"
+	"go-logistics/global"
 	"go-logistics/model"
 	"go-logistics/utils"
 	"io/ioutil"
@@ -14,8 +15,8 @@ type Kuaidi100Server struct{}
 
 func (k Kuaidi100Server) SearchRouter(barcode string) (int, map[string]interface{}) {
 	result := make(map[string]interface{})
-	client := &http.Client{}
-	posttype, postid := getCodeAndNum(barcode, client)
+	//client := &http.Client{}
+	posttype, postid := getCodeAndNum(barcode)
 	if posttype == "" {
 		return 500, result
 	}
@@ -33,7 +34,7 @@ func (k Kuaidi100Server) SearchRouter(barcode string) (int, map[string]interface
 	req.Header.Add("Sec-Fetch-Mode", "cors")
 	req.Header.Add("Sec-Fetch-Dest", "empty")
 
-	res, err := client.Do(req)
+	res, err := global.HttpClient.Do(req)
 	if err != nil {
 		fmt.Println(err)
 		return 500, result
@@ -76,7 +77,7 @@ func (k Kuaidi100Server) SearchRouter(barcode string) (int, map[string]interface
 	return 200, result
 }
 
-func getCodeAndNum(id string, client *http.Client) (code string, num string) {
+func getCodeAndNum(id string) (code string, num string) {
 	url := "https://www.kuaidi100.com/autonumber/autoComNum?resultv2=1&text=" + id
 	req, err := http.NewRequest("POST", url, nil)
 	if err != nil {
@@ -86,7 +87,7 @@ func getCodeAndNum(id string, client *http.Client) (code string, num string) {
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
 
-	res, err := client.Do(req)
+	res, err := global.HttpClient.Do(req)
 	if err != nil {
 		return "", ""
 	}

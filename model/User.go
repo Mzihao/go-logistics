@@ -1,6 +1,7 @@
 package model
 
 import (
+	"go-logistics/global"
 	"go-logistics/utils/errmsg"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -17,7 +18,7 @@ type User struct {
 // CheckUser 查询用户是否存在
 func CheckUser(name string) (code int) {
 	var user User
-	DB.Select("id").Where("username = ?", name).First(&user)
+	global.DB.Select("id").Where("username = ?", name).First(&user)
 	if user.ID > 0 {
 		return errmsg.ErrorUsernameUsed //1001
 	}
@@ -27,7 +28,7 @@ func CheckUser(name string) (code int) {
 // CheckUpUser 更新查询
 func CheckUpUser(id int, name string) (code int) {
 	var user User
-	DB.Select("id, username").Where("username = ?", name).First(&user)
+	global.DB.Select("id, username").Where("username = ?", name).First(&user)
 	if user.ID == uint(id) {
 		return errmsg.Success
 	}
@@ -40,7 +41,7 @@ func CheckUpUser(id int, name string) (code int) {
 // CreateUser 新增用户
 func CreateUser(data *User) int {
 	//data.Password = ScryptPw(data.Password)
-	err := DB.Create(&data).Error
+	err := global.DB.Create(&data).Error
 	if err != nil {
 		return errmsg.Error // 500
 	}
@@ -50,7 +51,7 @@ func CreateUser(data *User) int {
 // GetUser 查询用户
 func GetUser(id int) (User, int) {
 	var user User
-	err := DB.Limit(1).Where("ID = ?", id).Find(&user).Error
+	err := global.DB.Limit(1).Where("ID = ?", id).Find(&user).Error
 	if err != nil {
 		return user, errmsg.Error
 	}
@@ -63,16 +64,16 @@ func GetUsers(username string, pageSize int, pageNum int) ([]User, int64) {
 	var total int64
 
 	if username != "" {
-		DB.Select("id,username,role,created_at").Where(
+		global.DB.Select("id,username,role,created_at").Where(
 			"username LIKE ?", username+"%",
 		).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users)
-		DB.Model(&users).Where(
+		global.DB.Model(&users).Where(
 			"username LIKE ?", username+"%",
 		).Count(&total)
 		return users, total
 	}
-	err := DB.Select("id,username,role,created_at").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users).Error
-	err = DB.Model(&users).Count(&total).Error
+	err := global.DB.Select("id,username,role,created_at").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users).Error
+	err = global.DB.Model(&users).Count(&total).Error
 
 	if err != nil {
 		return users, 0
@@ -86,7 +87,7 @@ func EditUser(id int, data *User) int {
 	var maps = make(map[string]interface{})
 	maps["username"] = data.Username
 	maps["role"] = data.Role
-	err := DB.Model(&user).Where("id = ? ", id).Updates(maps).Error
+	err := global.DB.Model(&user).Where("id = ? ", id).Updates(maps).Error
 	if err != nil {
 		return errmsg.Error
 	}
@@ -99,7 +100,7 @@ func ChangePassword(id int, data *User) int {
 	//var maps = make(map[string]interface{})
 	//maps["password"] = data.Password
 
-	err := DB.Select("password").Where("id = ?", id).Updates(&data).Error
+	err := global.DB.Select("password").Where("id = ?", id).Updates(&data).Error
 	if err != nil {
 		return errmsg.Error
 	}
@@ -109,7 +110,7 @@ func ChangePassword(id int, data *User) int {
 // DeleteUser 删除用户
 func DeleteUser(id int) int {
 	var user User
-	err := DB.Where("id = ? ", id).Delete(&user).Error
+	err := global.DB.Where("id = ? ", id).Delete(&user).Error
 	if err != nil {
 		return errmsg.Error
 	}
@@ -145,7 +146,7 @@ func CheckLogin(username string, password string) (User, int) {
 	var user User
 	var PasswordErr error
 
-	DB.Where("username = ?", username).First(&user)
+	global.DB.Where("username = ?", username).First(&user)
 
 	PasswordErr = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 

@@ -3,15 +3,14 @@ package model
 import (
 	"fmt"
 	"github.com/spf13/viper"
+	"go-logistics/global"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"net/url"
 	"time"
 )
 
-var DB *gorm.DB
-
-func InitDB() *gorm.DB {
+func InitDB() {
 	host := viper.GetString("datasource.host")
 	port := viper.GetString("datasource.port")
 	database := viper.GetString("datasource.database")
@@ -35,7 +34,7 @@ func InitDB() *gorm.DB {
 
 	err = db.AutoMigrate(&Logistics{}, &User{}, &PickUp{})
 	if err != nil {
-		return nil
+		panic("failed to create tables, err: " + err.Error())
 	}
 
 	// 获取通用数据库对象 sql.DB ，然后使用其提供的功能
@@ -50,11 +49,5 @@ func InitDB() *gorm.DB {
 	// SetConnMaxLifetime 设置了连接可复用的最大时间。
 	sqlDB.SetConnMaxLifetime(10 * time.Second)
 
-	DB = db
-
-	return db
-}
-
-func GetDB() *gorm.DB {
-	return DB
+	global.DB = db
 }

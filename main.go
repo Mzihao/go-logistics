@@ -1,6 +1,7 @@
 package main
 
 import (
+	"go-logistics/global"
 	"go-logistics/model"
 	"go-logistics/routes"
 	"go-logistics/utils"
@@ -20,5 +21,6 @@ import (
 func main() {
 	utils.InitConfig() // 加载配置文件
 	model.InitDB()     // 初始化数据库
+	global.InitHttpClient()
 	routes.InitRouter()
 }
