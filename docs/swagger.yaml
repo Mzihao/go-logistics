@@ -88,17 +88,11 @@ definitions:
     type: object
   schemas.LoginResponse:
     properties:
-      id:
-        description: 用户id
-        example: 1
-        type: integer
       message:
-        description: 响应信息
+        description: |-
+          Id      uint   `json:"id" form:"id" example:"1"`             //用户id
+          Name    string `json:"name" form:"name" example:"string"`    //用户名
         example: 成功
-        type: string
-      name:
-        description: 用户名
-        example: string
         type: string
       status:
         description: 响应状态
@@ -339,6 +333,21 @@ info:
   title: Logistics Open Api
   version: "1.0"
 paths:
+  /api/healthcheck:
+    get:
+      consumes:
+      - application/json
+      description: 健康检测
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.RegularResponse'
+      summary: 健康检测
+      tags:
+      - 健康检测模块
   /api/v1/admin/changePassword/{id}:
     put:
       consumes:

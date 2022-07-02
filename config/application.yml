@@ -4,13 +4,22 @@ server:
   port: 9090
 datasource:
   driverName: mysql
-  host: 127.0.0.1
+  host: 119.23.40.47
   port: 3306
   database: logistics-go
   username: root
-  password: 1234
+  password: ngt777
   charset: utf8
   loc: Asia/Shanghai
+email:
+  host: smtp.qq.com
+  port: 465
+  userName: xxx
+  password: xxx
+  isSSL: true
+  from: xxx
+  to:
+    - xxx
 logistics:
   SF:
     url: https://fapi.sf-express.com/fopApiServices/access/sandbox/enter

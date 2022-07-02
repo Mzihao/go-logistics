@@ -1,12 +1,11 @@
 package routes
 
 import (
-	v1 "go-logistics/api/v1"
-	"go-logistics/middleware"
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
+	"go-logistics/api/healthcheck"
+	v1 "go-logistics/api/v1"
+	"go-logistics/middleware"
 
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
@@ -27,11 +26,12 @@ func InitRouter() {
 	// r.Use(middleware.AccessLog())
 	r.Use(middleware.Cors())
 
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "Hello World",
-		})
-	})
+	//r.GET("/api/healthcheck", func(c *gin.Context) {
+	//	c.JSON(http.StatusOK, gin.H{
+	//		"message": "Hello World",
+	//	})
+	//})
+	r.GET("/api/healthcheck", healthcheck.HealthCheck)
 
 	/*
 		后台管理路由接口

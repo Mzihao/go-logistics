@@ -19,6 +19,29 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/healthcheck": {
+            "get": {
+                "description": "健康检测",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "健康检测模块"
+                ],
+                "summary": "健康检测",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.RegularResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/admin/changePassword/{id}": {
             "put": {
                 "security": [
@@ -660,20 +683,10 @@ const docTemplate = `{
         "schemas.LoginResponse": {
             "type": "object",
             "properties": {
-                "id": {
-                    "description": "用户id",
-                    "type": "integer",
-                    "example": 1
-                },
                 "message": {
-                    "description": "响应信息",
+                    "description": "Id      uint   ` + "`" + `json:\"id\" form:\"id\" example:\"1\"` + "`" + `             //用户id\nName    string ` + "`" + `json:\"name\" form:\"name\" example:\"string\"` + "`" + `    //用户名",
                     "type": "string",
                     "example": "成功"
-                },
-                "name": {
-                    "description": "用户名",
-                    "type": "string",
-                    "example": "string"
                 },
                 "status": {
                     "description": "响应状态",
