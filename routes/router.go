@@ -6,10 +6,21 @@ import (
 	"go-logistics/api/healthcheck"
 	v1 "go-logistics/api/v1"
 	"go-logistics/middleware"
+	"go-logistics/utils/limiter"
+	"time"
 
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 	_ "go-logistics/docs"
+)
+
+var methodLimiters = limiter.NewMethodLimiter().AddBuckets(
+	limiter.LimiterBucketRule{
+		Key:          "logistics",
+		FillInterval: time.Second,
+		Capacity:     1,
+		Quantum:      1,
+	},
 )
 
 func InitRouter() {
@@ -22,7 +33,7 @@ func InitRouter() {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.Use(middleware.Log())
-	// r.Use(gin.Recovery())
+	r.Use(gin.Recovery())
 	// r.Use(middleware.AccessLog())
 	r.Use(middleware.Cors())
 
@@ -38,7 +49,7 @@ func InitRouter() {
 	*/
 	auth := r.Group("api/v1")
 	auth.Use(middleware.JwtToken())
-	auth.Use(middleware.RateLimiter())
+	auth.Use(middleware.RateLimiter(methodLimiters))
 	{
 		// 用户模块的路由接口
 		auth.GET("users", v1.GetUsers)
