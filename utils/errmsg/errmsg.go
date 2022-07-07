@@ -20,24 +20,26 @@ const (
 	NotSupport      = 4003
 
 	// code= 500...
-	VerificationFailure = 5001
+	VerificationFailure  = 5001
+	ErrorTooManyRequests = 5002
 )
 
 var codeMsg = map[int]string{
-	Success:             "SUCCESS",
-	Error:               "FAIL",
-	ErrorUsernameUsed:   "用户名已存在！",
-	ErrorPasswordWrong:  "密码错误",
-	ErrorUserNotExist:   "用户不存在",
-	ErrorTokenExist:     "TOKEN不存在,请重新登陆",
-	ErrorTokenRuntime:   "TOKEN已过期,请重新登陆",
-	ErrorTokenWrong:     "TOKEN不正确,请重新登陆",
-	ErrorTokenTypeWrong: "TOKEN格式错误,请重新登陆",
-	ErrorUserNoRight:    "该用户无权限",
-	IncorrectLength:     "物流单号长度不正确",
-	NotFound:            "查无此单号",
-	NotSupport:          "暂未支持该物流公司",
-	VerificationFailure: "数据校验失败",
+	Success:              "SUCCESS",
+	Error:                "FAIL",
+	ErrorUsernameUsed:    "用户名已存在！",
+	ErrorPasswordWrong:   "密码错误",
+	ErrorUserNotExist:    "用户不存在",
+	ErrorTokenExist:      "TOKEN不存在,请重新登陆",
+	ErrorTokenRuntime:    "TOKEN已过期,请重新登陆",
+	ErrorTokenWrong:      "TOKEN不正确,请重新登陆",
+	ErrorTokenTypeWrong:  "TOKEN格式错误,请重新登陆",
+	ErrorUserNoRight:     "该用户无权限",
+	IncorrectLength:      "物流单号长度不正确",
+	NotFound:             "查无此单号",
+	NotSupport:           "暂未支持该物流公司",
+	VerificationFailure:  "数据校验失败",
+	ErrorTooManyRequests: "请求过多！",
 }
 
 func GetErrMsg(code int) string {

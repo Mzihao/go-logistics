@@ -38,6 +38,7 @@ func InitRouter() {
 	*/
 	auth := r.Group("api/v1")
 	auth.Use(middleware.JwtToken())
+	auth.Use(middleware.RateLimiter())
 	{
 		// 用户模块的路由接口
 		auth.GET("users", v1.GetUsers)
