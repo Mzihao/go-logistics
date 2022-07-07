@@ -1,7 +1,6 @@
 package limiter
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/juju/ratelimit"
 )
@@ -19,7 +18,6 @@ func NewMethodLimiter() LimiterIface {
 
 func (l MethodLimiter) Key(c *gin.Context) string {
 	//uri := c.Request.RequestURI
-	//fmt.Println(uri)
 	//index := strings.Index(uri, "2")
 	//if index == -1 {
 	//	return uri
@@ -30,13 +28,11 @@ func (l MethodLimiter) Key(c *gin.Context) string {
 }
 
 func (l MethodLimiter) GetBucket(key string) (*ratelimit.Bucket, bool) {
-	fmt.Println("获取令牌")
 	bucket, ok := l.limiterBuckets[key]
 	return bucket, ok
 }
 
 func (l MethodLimiter) AddBuckets(rules ...LimiterBucketRule) LimiterIface {
-	fmt.Println("add令牌")
 	for _, rule := range rules {
 		if _, ok := l.limiterBuckets[rule.Key]; !ok {
 			bucket := ratelimit.NewBucketWithQuantum(
